@@ -1,0 +1,99 @@
+.Tab{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    /* padding: 15px 0; */
+    padding: 0px 0 15px 0;
+
+    background-color: #fff;
+    /* border-top: 1px solid rgba(134, 134, 134, 0.7); */
+    border-top: 1px solid rgba(134, 134, 134, 0.2);
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 10;
+}
+.tabbutton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0);
+    margin: 12px 0 0 0;
+
+}
+
+
+.tabbutton p{
+    background-color: rgba(255, 255, 255, 0);
+    color: #000;
+    margin: 5px 0 15px  0;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.activeTabText{
+    color: #01DA01;
+}
+
+.noactiveTabText{
+    color: #808080;
+}
+
+.notification-button {
+    position: relative;
+}
+
+.notification-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff3333;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 4px rgba(255, 51, 51, 0.3);
+    }
+}
+
+.icons-svg{
+    fill: #01DA01;
+
+    stroke: #01DA01;
+    color: #01DA01;
+    width: 25px;
+
+}
+
+
+
+
+.ionicon {
+    fill: #01DA01;
+  }
+
+

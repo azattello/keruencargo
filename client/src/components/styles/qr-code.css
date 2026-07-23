@@ -1,0 +1,135 @@
+/* QR Code Display for Users */
+.qr-code-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+}
+
+.qr-code-section h2 {
+  color: #2D7020;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.qr-description {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.qr-code-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f9fa;
+  border: 2px dashed #2D7020;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  min-height: 300px;
+}
+
+.qr-code-box canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.qr-info {
+  background: #f0f4f0;
+  border-left: 4px solid #2D7020;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.qr-info p {
+  margin: 10px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.qr-info strong {
+  color: #2D7020;
+}
+
+.qr-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-download,
+.btn-copy {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-download {
+  background: #2D7020;
+  color: white;
+}
+
+.btn-download:hover {
+  background: #1f5015;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 112, 32, 0.3);
+}
+
+.btn-copy {
+  background: #e8f5e9;
+  color: #2D7020;
+  border: 2px solid #2D7020;
+}
+
+.btn-copy:hover {
+  background: #c8e6c9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .qr-code-container {
+    padding: 15px;
+  }
+
+  .qr-code-section {
+    padding: 15px;
+  }
+
+  .qr-code-section h2 {
+    font-size: 20px;
+  }
+
+  .qr-code-box {
+    min-height: 250px;
+    padding: 15px;
+  }
+
+  .qr-actions {
+    flex-direction: column;
+  }
+
+  .btn-download,
+  .btn-copy {
+    width: 100%;
+  }
+}

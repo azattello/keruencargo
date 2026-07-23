@@ -1,0 +1,465 @@
+/* Add Track to Client - Warehouse Style */
+.add-track-to-client {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.warehouse-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.warehouse-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.warehouse-header h1 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.warehouse-header p {
+  margin: 0;
+  color: #999;
+  font-size: 16px;
+}
+
+.add-track-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.step-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.step-section:hover {
+  border-color: #2D7020;
+  box-shadow: 0 4px 12px rgba(45, 112, 32, 0.1);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.step-number {
+  min-width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #2D7020 0%, #1a4410 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.step-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+/* Поиск */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2D7020;
+  box-shadow: 0 0 0 3px rgba(45, 112, 32, 0.1);
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Результаты поиска */
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-result:hover {
+  background: #f0f0f0;
+  border-color: #2D7020;
+}
+
+.user-info p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.user-phone {
+  color: #666;
+}
+
+.user-id {
+  color: #999;
+  font-size: 12px;
+}
+
+.select-btn {
+  padding: 6px 12px;
+  background: #2D7020;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select-btn:hover {
+  background: #1a4410;
+}
+
+/* Выбранный пользователь */
+.selected-user-card {
+  background: #e8f5e9;
+  border: 1px solid #2D7020;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.user-details h4 {
+  margin: 0 0 12px 0;
+  color: #2D7020;
+  font-size: 16px;
+}
+
+.user-details p {
+  margin: 4px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.change-user-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.change-user-btn:hover {
+  background: #e8e8e8;
+  border-color: #2D7020;
+}
+
+/* Добавление треков */
+.track-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.track-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.track-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.track-input:focus {
+  outline: none;
+  border-color: #2D7020;
+  box-shadow: 0 0 0 3px rgba(45, 112, 32, 0.1);
+}
+
+.add-track-btn {
+  padding: 12px 20px;
+  background: #2D7020;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-track-btn:hover:not(:disabled) {
+  background: #1a4410;
+  transform: translateY(-1px);
+}
+
+.add-track-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Список треков */
+.tracks-list {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+@media (max-width: 1024px) {
+  .add-track-to-client { padding: 12px; }
+  .warehouse-container { max-width: 100%; margin: 0; padding: 0; }
+  .warehouse-header h1 { font-size: 22px; }
+  .warehouse-header p { font-size: 14px; }
+  .step-section { padding: 14px; }
+  .step-header { gap: 10px; }
+  .step-number { min-width: 34px; height: 34px; font-size: 16px; }
+  .step-header h3 { font-size: 16px; }
+  .search-input,
+  .track-input,
+  .add-track-btn,
+  .change-user-btn,
+  .select-btn { font-size: 14px; min-height: 42px; }
+  .track-input-group { flex-direction: column; }
+  .step-section { border-radius: 10px; }
+  .user-result { padding: 10px; flex-direction: column; align-items: flex-start; }
+  .user-info { width: 100%; }
+  .user-result .select-btn { width: 100%; margin-top: 8px; }
+}
+
+@media (max-width: 768px) {
+  .add-track-to-client { padding: 8px; }
+  .warehouse-header h1 { font-size: 20px; }
+  .step-number { min-width: 32px; height: 32px; }
+  .track-input-group { position: relative; }
+  .track-input, .add-track-btn { width: 100%; }
+  .track-input { margin-bottom: 8px; }
+  .tracks-list { padding: 12px; }
+}
+
+
+.tracks-list h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.tracks-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.track-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.track-chip span {
+  color: #333;
+}
+
+.remove-chip {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.remove-chip:hover {
+  background: #ffeaea;
+  color: #d32f2f;
+}
+
+/* Кнопка отправки */
+.submit-section {
+  text-align: center;
+}
+
+.submit-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #2D7020 0%, #1a4410 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(45, 112, 32, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Модальное окно подтверждения */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.confirm-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 400px;
+  width: 85%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-content h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 20px;
+  text-align: center;
+}
+
+.confirm-content p {
+  margin: 0 0 25px 0;
+  color: #666;
+  font-size: 15px;
+  text-align: center;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.confirm-yes,
+.confirm-no {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.confirm-yes {
+  background: #2D7020;
+  color: white;
+}
+
+.confirm-yes:hover:not(:disabled) {
+  background: #1a4410;
+}
+
+.confirm-no {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.confirm-no:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.confirm-yes:disabled,
+.confirm-no:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Сообщения */
+.message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.message.error {
+  background: #ffeaea;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+.message.success {
+  background: #e8f5e9;
+  color: #2D7020;
+  border: 1px solid #c8e6c9;
+}

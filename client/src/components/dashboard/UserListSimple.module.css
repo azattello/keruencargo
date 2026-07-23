@@ -1,0 +1,174 @@
+ .container {
+  width: calc(100% - 250px);
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+  padding: 18px 12px;
+  margin: 0;
+  min-width: 0;
+}
+
+
+ .title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  color: #201f20;
+  text-align: left;
+}
+
+
+ .filterBar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  align-items: center;
+}
+
+
+ .select, .input {
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  outline: none;
+  background: #f8f8f8;
+}
+
+
+ .table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-top: 8px;
+}
+
+
+ .table th {
+  background: #f2f2f2;
+  color: #303030;
+  font-weight: 500;
+  padding: 10px 7px;
+  font-size: 15px;
+}
+
+
+ .table td {
+  padding: 9px 7px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #222;
+  font-size: 15px;
+}
+
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+ .actionBtn {
+  background: #4285F4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: background 0.2s;
+}
+.actionBtn:last-child {
+  margin-right: 0;
+}
+.actionBtn:hover {
+  background: #2563eb;
+}
+
+
+ .modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+
+ .modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 22px 16px;
+  min-width: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+
+ .modal h3 {
+  font-size: 18px;
+  margin-bottom: 14px;
+  color: #4285F4;
+}
+
+
+ .modal select, .modal input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 7px 9px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+
+ .modal .error {
+  color: #c25757;
+  margin-bottom: 8px;
+}
+
+
+ .modal .modalActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+
+ .modal .modalActions button {
+  flex: 1;
+  padding: 7px 0;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background: #4285F4;
+  color: #fff;
+  transition: background 0.2s;
+}
+.modal .modalActions button:last-child {
+  background: #64748b;
+}
+.modal .modalActions button:hover {
+  background: #2563eb;
+}
+
+ul {
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 8px 2px;
+  }
+  .table th, .table td {
+    padding: 6px 2px;
+    font-size: 0.95rem;
+  }
+  .modal {
+    min-width: 95vw;
+    padding: 12px 4px;
+  }
+}

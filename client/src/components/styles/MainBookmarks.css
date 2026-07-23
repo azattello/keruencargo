@@ -1,0 +1,624 @@
+/* Контейнер табов */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 10px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  scrollbar-width: none;
+
+  margin-top: 10px;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* Кнопка таба */
+.tab {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+  background: #f7f7f7;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Активный таб */
+.tab.active {
+  background: #2e7d32; /* зелёный */
+  color: #fff;
+  border-color: #2e7d32;
+  font-weight: 500;
+}
+
+/* Бейдж */
+.count {
+  background: #e0e0e0;
+  color: #2e7d32;
+  font-size: 12px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+/* Бейдж в активном табе */
+.tab.active .count {
+  background: #fff;
+  color: #2e7d32;
+}
+
+/* Список треков */
+.tracks {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Карточка трека */
+.track-item {
+  background: #fff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+
+
+/* карточки */
+.tracks {
+  padding: 12px;
+}
+
+.track-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative; /* для абсолютного меню */
+  overflow: visible; /* позволяем выпадающему меню быть поверх */
+}
+
+.track-card.open {
+  background: #f9fdfb;
+  border: 1px solid #007f3d20;
+}
+.track-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* visible actions for not found items (now inside header) */
+.track-actions-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-delete {
+  background: #d9534f;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-edit-small {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ensure menu positioned well */
+.track-menu-wrapper { position: absolute; top: 8px; right: 8px; }
+.track-menu { z-index: 300; }
+
+/* tracks info row: code left, status+date right */
+.track-info-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 8px; }
+.status-and-date { display: flex; align-items: center; gap: 12px; }
+
+/* Mobile tweaks */
+@media (max-width: 520px) {
+  .track-menu-wrapper { top: 6px; right: 6px; }
+  .track-actions-header { gap: 6px; }
+  .btn-delete { padding: 6px 8px; font-size: 13px; }
+  .btn-edit-small { padding: 6px 8px; font-size: 13px; }
+  .modal-container { width: 92%; padding: 18px; }
+  .modal-title { font-size: 18px; }
+}
+
+
+.track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.track-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #222;
+}
+
+.track-code {
+  font-size: 14px;
+  color: #444;
+}
+
+.track-description {
+  font-size: 14px;
+  color: #555;
+  margin-top: 8px;
+}
+
+.track-code-row {
+  margin-top: 6px;
+}
+
+.track-status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; margin-top: 10px; }
+
+.status-and-date { display: flex; gap: 12px; align-items: center; }
+
+.track-status {
+  font-size: 14px;
+  font-weight: 500;
+  color: #007f3d;
+}
+
+.track-date {
+  font-size: 12px;
+  color: #999;
+}
+
+
+.track-menu-wrapper {
+  position: relative;
+  margin-left: auto;
+}
+
+.track-menu-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.track-menu-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.track-menu {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background: #f5f5f5;
+}
+
+.menu-item.delete {
+  color: #d9534f;
+}
+
+
+
+/* история */
+.track-history {
+  margin-top: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  position: relative;
+}
+
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 12px;
+  padding-left: 24px;
+}
+
+.history-item .circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 4px;
+}
+
+.history-item.done .circle {
+  background: #ccc;
+}
+
+.history-item.current .circle {
+  background: #007f3d;
+  box-shadow: 0 0 0 4px rgba(0, 127, 61, 0.15);
+}
+
+.history-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-status {
+  font-size: 14px;
+  color: #333;
+}
+
+.history-item.done .history-status {
+  color: #777;
+}
+
+.history-item.current .history-status {
+  font-weight: 600;
+  color: #007f3d;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #aaa;
+}
+
+
+/* Общий фон */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Карточка */
+.modal-container {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Заголовок */
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: center;
+  color: #333;
+}
+
+/* Поля ввода */
+.modal-fields input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.modal-fields input:focus {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgb(21, 128, 61, 0.25);
+}
+
+/* Кнопки */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel,
+.btn-save {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+/* Кнопка отмены */
+.btn-cancel {
+  background: #f0f0f0;
+  color: #555;
+}
+.btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+/* Кнопка сохранить */
+.btn-save {
+  background: #15803d;
+  color: white;
+}
+.btn-save:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
+/* Floating Action Button (FAB) */
+.fab-add-parcel {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #15803d;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgb(21, 128, 61, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+/* Hover эффект */
+.fab-add-parcel:hover {
+  background: #15803d;
+  transform: scale(1.07);
+  box-shadow: 0 6px 20px rgb(21, 128, 61, 0.5);
+}
+
+/* Эффект при нажатии */
+.fab-add-parcel:active {
+  transform: scale(0.95);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 60px; /* отступ снизу, чтобы быть внизу страницы */
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: 500;
+  color: #444;
+}
+
+/* Menu delete styling */
+.menu-item.delete {
+  color: #d9534f;
+  font-weight: 600;
+}
+
+/* If title is empty, reduce visual gap */
+.track-title.no-title {
+  min-height: 0;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  color: #666;
+}
+
+/* Slightly smaller action buttons and clearer colors */
+.btn-delete {
+  background: #ff4d4f;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.btn-edit-small {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  color: #0b5;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.track-menu-btn {
+  font-size: 18px;
+  padding: 6px;
+}
+
+/* Toasts */
+.toast-root {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 12000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  min-width: 180px;
+  max-width: 320px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  font-weight: 600;
+  animation: toastIn 0.2s ease;
+}
+.toast.info { background: #333; }
+.toast.success { background: #15803d; }
+.toast.error { background: #d9534f; }
+@keyframes toastIn { from { transform: translateY(-6px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+
+/* Confirm modal */
+.confirm-overlay {
+  position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index:12001; background: rgba(0,0,0,0.45);
+}
+.confirm-modal {
+  background: #fff; padding: 18px; border-radius: 10px; width: 360px; max-width: 92%; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.confirm-message { font-weight:600; margin-bottom: 14px; }
+.confirm-actions { display:flex; justify-content:flex-end; gap:10px; }
+
+/* Pulse animation for current history item */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.history-item.current .circle {
+  animation: pulse 1.5s infinite;
+  width: 14px; height: 14px; left: -1px; top: 3px;
+}
+
+.history-load-more { margin-top: 10px; display:flex; justify-content:flex-start; }
+.history-load-more button { padding: 8px 12px; border-radius: 8px; border: 1px solid #e0e0e0; background: #fff; cursor:pointer; }
+.history-load-more button:disabled { opacity: 0.6; cursor:not-allowed }
+
+/* Minor tweak: keep date legible */
+.track-date { color: #777; font-size: 13px; }
+
+/* Archive tab special styling */
+.tab.archive-tab {
+  background: linear-gradient(135deg, #f5a962, #f57c2e);
+  color: #fff;
+  border-color: #f57c2e;
+  font-weight: 600;
+}
+
+.tab.archive-tab.active {
+  background: #f57c2e;
+  border-color: #d96b1f;
+}
+
+.tab.archive-tab .count {
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+/* Button for archiving all received tracks */
+.archive-button-wrapper {
+  padding: 10px 10px 0 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-archive-all {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+}
+
+.btn-archive-all:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.btn-archive-all:active {
+  transform: translateY(0);
+}
+
+/* Archive section inside MainBookmarks */
+.archive-section {
+  padding: 10px;
+  background: #fafafa;
+}
+
+

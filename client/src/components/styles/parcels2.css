@@ -1,0 +1,222 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.not-found-list{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.bookmark-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
+
+.bookmark-header {
+  padding: 10px;
+  background-color: #0F748C; /* Светло-голубой фон для контрастного вида */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавляем небольшую тень для эффекта глубины */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bookmark-h2{
+  font-size: 18px; /* Сделаем заголовок компактным, как на фото */
+  font-weight: bold; /* Используем жирный текст для контраста */
+  color: #e9f4ff; /* Используем ярко-синий цвет для контраста */
+  margin: 0;
+
+}
+
+
+.removeLiBookmark{
+  width: 20px;
+  height: 20px;
+  color: #ececec;
+}
+
+
+.description {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Линия под каждым статусом */
+}
+
+
+.statuses-bookmark {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 20px 10px 20px;
+}
+
+
+
+.status-item {
+  display: flex;
+  align-items: center;
+  margin: 0 0 10px 0;
+  padding-bottom: 10px;
+}
+
+.status-item:not(:last-child) {
+  border-bottom: 1px solid #ddd; /* Линия под каждым статусом, кроме последнего */
+}
+
+.status-icon.completed {
+  font-size: 20px;
+  color: #4caf50; /* Зеленая галочка */
+}
+
+.status-icon.pending {
+  color: #ccc; /* Серый крестик */
+  font-size: 20px;
+}
+
+.status-text p {
+  margin:  0 0 0 15px;
+}
+
+.status-text span{
+  color: #636363;
+  margin:  0 0 0 15px;
+
+}
+
+.bookmark-summary{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  background-color: #cfcfcf;
+  cursor: not-allowed;
+}
+.pagination-button:hover{filter:brightness(0.96)}
+
+.pagination-info {
+  margin: 0 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+
+.price-weight{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.price-weight .description{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.invoice-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.invoice-card {
+  background-color: #d32f2f; /* Красный фон */
+  color: white; /* Белый текст */
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%; /* Максимальная ширина блока */
+  text-align: left; /* Текст выравнивается влево */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для блока */
+}
+.invoice-card h2{
+  margin: 5px 0; /* Отступы между строками */
+  font-size: 14px; /* Размер текста */
+  font-weight: 500;
+
+} 
+.invoice-card p {
+  margin: 5px 0; /* Отступы между строками */
+  font-size: 14px; /* Размер текста */
+}
+
+
+.paid-track {
+  background-color: #0F748C; /* Светло-зеленый для оплаченных треков */
+}
+
+.unpaid-track {
+  background-color: #f44336; /* Светло-красный для неоплаченных треков */
+}
+
+
+.paid-track {
+  background-color: #4caf50; /* Светло-зеленый для оплаченных треков */
+}
+
+.unpaid-track {
+  background-color: #f44336; /* Светло-красный для неоплаченных треков */
+}
+
+.no-invoice-track {
+  background-color: #0F748C; /* Цвет для треков, не связанных ни с одним счетом */
+}
+
+
+.invoice__text{
+  text-align: center;
+  padding: 5px;
+  background-color: #dfdfdf;
+  border-radius: 10px;
+
+}
+
+.confirmTrack{
+  padding: 10px 0;
+  border-radius: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0px 4px 10px rgb(226, 226, 226);
+}

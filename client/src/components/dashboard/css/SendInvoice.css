@@ -1,0 +1,104 @@
+/* SendInvoice Component Styles - Minimal CSS */
+
+/* Body text selection */
+.send-invoice-table tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.send-invoice-table tbody::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.send-invoice-table tbody::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.send-invoice-table tbody::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Animations for modals */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Message animations */
+.send-invoice-message {
+  animation: slideUp 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .send-invoice-container {
+    padding: 10px !important;
+    width: 100%;
+  }
+  .send-invoice-table,
+  .invoice-table,
+  .invoice-summary,
+  .invoice-controls {
+    width: 100% !important;
+  }
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  .table-responsive table {
+    width: 100% !important;
+    min-width: 720px;
+  }
+  .send-invoice-table th,
+  .send-invoice-table td,
+  .invoice-table th,
+  .invoice-table td {
+    padding: 8px !important;
+    font-size: 13px !important;
+  }
+  .send-invoice-controls {
+    flex-wrap: wrap !important;
+    gap: 8px;
+  }
+  input,
+  textarea,
+  select,
+  button {
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .send-invoice-container {
+    padding: 8px !important;
+  }
+  .send-invoice-table,
+  .invoice-table,
+  .invoice-summary,
+  .invoice-controls {
+    width: 100% !important;
+  }
+  .invoice-status-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+

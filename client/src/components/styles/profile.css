@@ -1,0 +1,326 @@
+.profile {
+    height: 100%;
+    width: 100%;
+    background-color: #f8f9fa;
+    color: #1B1B1B;
+    min-height: 100vh;
+}
+
+/* Хедер */
+.header-main {
+    width: 100%;
+    height: 45px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.text-header {
+    color: #1d1d1d;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+/* Контейнер профиля */
+.section__profile {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 14px;
+    color: #999;
+}
+
+/* ===== ПРОФИЛЬ ХЕДЕР ===== */
+.profile-header {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile-id-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.profile-id-label {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.profile-id {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1d;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.copy-id-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-id-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.copy-id-btn:active {
+    transform: scale(0.98);
+}
+
+/* ===== ИНФОРМАЦИЯ ===== */
+.profile-info-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-row-c {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.info-row-c:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+    min-width: 100px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: #1d1d1d;
+    font-weight: 500;
+    text-align: right;
+    flex: 1;
+}
+
+/* ===== ПАРОЛЬ ===== */
+.password-section {
+    margin-bottom: 20px;
+}
+
+.password-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.password-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.password-label-text {
+    font-size: 12px;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.password-toggle-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+    background-color: #f0f3f7;
+    transform: scale(1.1);
+}
+
+.password-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.password-display {
+    background: linear-gradient(135deg, #f5f7fa 0%, #f0f3f7 100%);
+    border: 1px solid #e8ecf1;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    color: #1d1d1d;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    letter-spacing: 2px;
+    word-break: break-all;
+}
+
+/* ===== КНОПКИ ДЕЙСТВИЯ ===== */
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.dashboard-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.dashboard-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+}
+
+.dashboard-btn:active {
+    transform: translateY(0);
+}
+
+.settings-btn {
+    background-color: #5a67d8;
+    color: white;
+}
+
+.settings-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(245, 87, 108, 0.3);
+}
+
+.settings-btn:active {
+    transform: translateY(0);
+}
+
+.logout-btn-client {
+    background-color: rgba(122, 12, 12, 0.788);
+    color: white;
+}
+
+.logout-btn-client:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(250, 112, 154, 0.3);
+}
+
+.logout-btn-client:active {
+    transform: translateY(0);
+}
+
+/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+@media (max-width: 480px) {
+    .section__profile {
+        padding: 15px;
+    }
+
+    .profile-header {
+        padding: 15px;
+    }
+
+    .profile-id-section {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .profile-id-label {
+        font-size: 14px;
+    }
+
+    .profile-id {
+        font-size: 18px;
+    }
+
+    .copy-id-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .profile-info-section {
+        padding: 15px;
+    }
+
+    .info-row-c {
+        padding: 10px 0;
+    }
+
+    .info-label {
+        font-size: 14px;
+        min-width: 80px;
+    }
+
+    .info-value {
+        font-size: 14px;
+    }
+
+    .action-btn {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+
+    .password-display {
+        padding: 10px;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 360px) {
+    .profile-id {
+        font-size: 16px;
+    }
+
+    .info-label {
+        font-size: 13px;
+    }
+
+    .info-value {
+        font-size: 13px;
+    }
+}
+
+/* ===== ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ ===== */
+.area3 {
+    height: 80px;
+}

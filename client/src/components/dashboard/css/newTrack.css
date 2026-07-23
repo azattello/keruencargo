@@ -1,0 +1,88 @@
+.modal-track {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование по горизонтали и вертикали */
+    
+    background-color: #fff;
+    width: 500px; /* Задаем фиксированную ширину */
+    height: auto; /* Высота подстраивается под контент */
+    max-height: 90%; /* Максимальная высота - 80% от высоты экрана */
+    overflow-y: auto; /* Скролл, если содержимого слишком много */
+
+    border: 1px solid #007bff; /* Цвет границы */
+    padding: 20px 30px 40px 30px;
+    border-radius: 10px; /* Закругленные углы */
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для эстетики */
+    text-align: center;
+    color: #111111;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Устанавливаем поверх других элементов */
+}
+
+/* Фон для затемнения */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    z-index: 999; /* Позади модального окна, но поверх контента страницы */
+}
+
+.modal-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.modal-header h2{
+    font-size: 23px;
+    font-weight: 500;
+    color: #303030;
+
+}
+.close{
+    width: 20px;
+    height: 20px;
+    background-image: url('../../../assets/img/closeA.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.close:hover{
+    background-image: url('../../../assets/img/closeB.png');
+
+}
+
+
+
+
+.track-text{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0 ;
+}
+
+.track-text span{
+    color: #007bff;
+}
+
+.status-block-new{
+    margin: 15px 0 0 0;
+}
+
+.change-track-button{
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}

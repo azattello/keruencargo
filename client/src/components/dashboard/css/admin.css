@@ -1,0 +1,2379 @@
+.dashboard{
+    display: flex;
+    /* justify-content: space-between; */
+    width: 100%;
+    margin: 0 auto;
+}
+.mainAdmin{
+    background-color: #f7f7f7;
+    width: calc(100% - 250px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loadpage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+.loadpage img{
+    width: 100px;
+}
+
+.process{
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px);
+}
+
+.title-admin{
+    width: 100%;    
+    background-color: #111111;
+    background-color: #201f20;
+    color: #f7f7f7;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+
+.opacity{
+    opacity: 0;
+}
+
+.linkToSite{
+    color: #eeeeee;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+
+.my-cargo-flex2{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.my-cargo{
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px);
+}
+
+.my-cargo-top-panels {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+@media (max-width: 1024px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .mainAdmin,
+    .process,
+    .my-cargo {
+        width: 100% !important;
+        padding: 10px !important;
+        margin: 0 !important;
+    }
+
+    .mainAdmin {
+        align-items: stretch;
+    }
+
+    .send-invoice-container,
+    .invoice-controls,
+    .invoice-summary,
+    .send-invoice-table,
+    .invoice-table {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .send-invoice-table th,
+    .send-invoice-table td,
+    .invoice-table th,
+    .invoice-table td {
+        padding: 8px !important;
+        font-size: 13px !important;
+    }
+}
+
+.my-cargo-bottom-section {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 50px;
+}
+
+.panel-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.section-my-cargo{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+
+
+
+.status-list{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid rgba(129, 129, 129, 0.3);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);    
+}
+.status-list-title{
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+
+.banner-list {
+    width: 40%;
+    height: 300px;
+}
+
+.banner-slider {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.banner-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-slide.inactive {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.banner-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.banner-placeholder {
+    width: 100%;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.banner-delete {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(220, 53, 69, 0.9);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.banner-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.35);
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-control.prev { left: 10px; }
+.banner-control.next { right: 10px; }
+
+.banner-indicators {
+    position: absolute;
+    bottom: 8px;
+    right: 50%;
+    transform: translateX(50%);
+    display: flex;
+    gap: 5px;
+}
+
+.banner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.banner-dot.active {
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.statuses{
+    margin-top: 10px;
+}   
+
+.status-el{
+    padding: 15px;
+    font-size: 16px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(129, 129, 129, 0.5);
+    cursor: pointer;
+}
+
+/* Мобильное поведение дашборда */
+@media (max-width: 1024px) {
+    .dashboard {
+        display: block;
+    }
+    .mainAdmin, .my-cargo, .my-cargo-flex2, .process {
+        width: 100% !important;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+    }
+    .title-admin {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+    .my-cargo-top-panels,
+    .my-cargo-bottom-section,
+    .status-list,
+    .banner-list,
+    .banner-slider,
+    .panel-card {
+        width: 100% !important;
+        padding: 10px;
+        margin: 0;
+    }
+    .my-cargo-top-panels {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .process {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .title-admin { font-size: 14px; }
+    .nav-section-title { font-size: 11px; }
+    .status-list,
+    .banner-slider,
+    .panel-card {
+        border-radius: 8px;
+    }
+    table {
+        width: 100% !important;
+        font-size: 13px;
+    }
+    .dashboard {
+        padding-top: 50px;
+    }
+
+    /* AddTrack: статус + дата + кнопка в одну колонку */
+    .tracks-table .table-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .tracks-table .table-header > div,
+    .tracks-table .table-header select,
+    .tracks-table .table-header input,
+    .tracks-table .table-header button,
+    .tracks-table .table-header span {
+        min-width: 100%;
+        flex: none;
+        width: 100%;
+    }
+    .tracks-table .table-header { justify-content: flex-start; }
+
+    .tracks-table .table-body .table-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .tracks-table .table-body .table-row > div {
+        width: 100%;
+    }
+    .tracks-table .table-body .table-row button {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+        margin-left: auto;
+        border-radius: 50%;
+        border: 1px solid #dc3545;
+        background-color: transparent;
+        color: #dc3545;
+        font-size: 14px;
+        line-height: 1;
+        padding: 0;
+    }
+
+    /* UserList drawer: фильтры, табы */
+    .profile-modal-container, .mainAdmin, .user-profile-modal {
+        padding: 10px !important;
+    }
+
+    /* Листинг в объявлениях */
+    .announcement-actions-top { flex-direction: column; gap: 10px; }
+    .announcement-search, .btn-create { width: 100%; }
+
+    /* Текст и кнопки */
+    .btn-save, .btn-cancel, .btn-create, .search-btn { min-height: 44px; }
+
+    .tracks-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .tracks-controls .status-select,
+    .tracks-controls .date-input,
+    .tracks-controls .upload-btn {
+      width: auto;
+      flex: 1 1 150px;
+    }
+
+.user-profile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.user-profile-drawer .close-btn {
+    width: 32px;
+    height: 32px;
+}
+
+.user-profile-drawer .user-profile-content {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 6px;
+}
+
+@media (max-width: 900px) {
+    .user-profile-drawer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 12px;
+        margin-top: 20px;
+    }
+
+    .user-profile-drawer .user-profile-content {
+        max-height: calc(100vh - 130px);
+        overflow-y: auto;
+    }
+}
+
+    .tracks-controls .upload-btn { min-height: 44px; }
+
+    @media (max-width: 768px) {
+      .tracks-controls { flex-direction: column; align-items: stretch; }
+      .tracks-controls .status-select,
+      .tracks-controls .date-input,
+      .tracks-controls .upload-btn { width: 100%; }
+      .tracks-table .table-header { padding: 12px; }
+      .tracks-table .table-body .table-row { padding: 10px; }
+    }
+}
+
+/* --- Расширенная адаптация для мобильных страниц админки --- */
+@media (max-width: 1024px) {
+  .mainAdmin { width: 100% !important; margin: 0 !important; padding: 10px !important; }
+  .mainAdmin > div { width: 100% !important; max-width: 100% !important; }
+  .mainAdmin .title-admin, .mainAdmin h1, .mainAdmin h3, .mainAdmin h2 {
+    font-size: 1.1rem !important;
+  }
+  .mainAdmin input,
+  .mainAdmin select,
+  .mainAdmin button,
+  .mainAdmin textarea {
+    font-size: 15px !important;
+    min-height: 44px !important;
+  }
+  .mainAdmin input, .mainAdmin select {
+    width: 100% !important;
+  }
+  .mainAdmin .scanner-section,
+  .mainAdmin .track-input-section,
+  .mainAdmin .form-addTrack,
+  .mainAdmin .nav-section,
+  .mainAdmin .status-list,
+  .mainAdmin .banner-list,
+  .mainAdmin .panel-card,
+  .mainAdmin .line {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .mainAdmin .page-controls,
+  .mainAdmin .table-header,
+  .mainAdmin .filters-row {
+    flex-wrap: wrap !important;
+  }
+  .mainAdmin table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mainAdmin table th,
+  .mainAdmin table td {
+    white-space: nowrap;
+    font-size: 13px !important;
+  }
+  .mainAdmin .track-row,
+  .mainAdmin .user-row,
+  .mainAdmin .invoice-row,
+  .mainAdmin .status-item,
+  .mainAdmin .step-section {
+    width: 100% !important;
+  }
+  .mainAdmin .sidebar-accordion,
+  .mainAdmin .header-actions {
+    width: 100% !important;
+    margin: 0 0 10px 0 !important;
+  }
+  .mainAdmin .button-group {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainAdmin label,
+  .mainAdmin p,
+  .mainAdmin span,
+  .mainAdmin small {
+    font-size: 13px !important;
+  }
+  .mainAdmin .mainAdmin-container,
+  .mainAdmin .warehouse-container,
+  .mainAdmin .add-track-content,
+  .mainAdmin .tracks-table,
+  .mainAdmin .track-list,
+  .mainAdmin .search-section,
+  .mainAdmin .step-section,
+  .mainAdmin .user-result,
+  .mainAdmin .selected-user-card {
+    padding: 8px !important;
+    margin: 0 !important;
+  }
+  .mainAdmin .table-header,
+  .mainAdmin .panel-card,
+  .mainAdmin .status-list,
+  .mainAdmin .track-input-group,
+  .mainAdmin .track-input,
+  .mainAdmin .add-track-btn,
+  .mainAdmin .search-input {
+    width: 100% !important;
+  }
+  .mainAdmin .add-track-btn,
+  .mainAdmin .select-btn,
+  .mainAdmin .change-user-btn,
+  .mainAdmin .logout-btn,
+  .mainAdmin button {
+    min-height: 46px !important;
+  }
+  .mainAdmin .mainAdmin-container .status-list {
+    margin-bottom: 12px;
+  }
+}
+.status-el:hover{
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);    
+
+}
+
+.trash{
+    width: 20px;
+}
+
+.form-addTrack{
+    margin: 20px 0 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+
+}
+.input-statusAdd{
+    border: 1px solid rgba(129, 129, 129, 0.5);
+    width: 100%;
+    border-radius: 4px 0px 0px 4px;
+    padding: 10px 15px;
+    border-right: 0;
+
+}
+
+.input-statusAdd:focus{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);    
+
+}
+
+.statusAdd-button{
+    background-color: #4285F4;
+    background-color: green;
+    color: #FFFFFF;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration:  0.3s;
+
+}
+.statusAdd-button:hover{
+    background-color: green;
+    background-color: #4285F4;
+
+}
+
+/* filial */
+
+.form-filialAdd{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.filial-field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+.input-filialAdd{
+    border: 1px solid rgba(129, 129, 129, 0.5);
+    width: 100%;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin: 0;
+    background: #fff;
+}
+.input-filialAdd:focus{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);    
+
+}
+
+.filialAdd-button{
+    margin-top: 10px;
+    background-color: #4285F4;
+    background-color: green;
+    color: #FFFFFF;
+    padding: 10px;
+    border: none;
+    border-radius:4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration:  0.3s;
+}
+.filialAdd-button:hover{
+    background-color: #4285F4;
+}
+
+.filial-el{
+    display: block;
+    margin-bottom: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.filial-list {
+    width: 100%;
+    background: #fff;
+    border: 1px solid rgba(129, 129, 129, 0.24);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 5px 14px rgba(16, 24, 40, 0.07);
+    margin-top: 20px;
+}
+
+.filial-list-title {
+    margin: 0 0 12px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f4e79;
+}
+
+.filial-table-wrapper {
+    overflow-x: auto;
+    margin-top: 16px;
+}
+
+.filial-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.filial-table th,
+.filial-table td {
+    border: 1px solid #e2e8f0;
+    padding: 9px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.filial-table th {
+    background: #f1f5f9;
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.filial-table tr:nth-child(odd) {
+    background: #fbfbfd;
+}
+
+.filial-table-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.filial-table-actions .filial-button {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filial-table-actions .edit {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.filial-table-actions .delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+@media (max-width: 1024px) {
+    .filial-field-row {
+        grid-template-columns: 1fr;
+    }
+    .filial-table {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel-card{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .banner-list{
+        width: 100%;
+    }
+    .my-cargo-top-panels {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .panel-card {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+}
+
+
+
+
+/* AddTrack */
+.mainAdmin-container{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0 0 0;
+    
+}
+.mini-contianer{
+    display: flex;
+    
+}
+.status-block {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    border-radius: 10px; /* Закругление углов */
+    text-align: center;
+    margin: 20px 0;
+    color: rgb(255, 255, 255);
+    color: #111111;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: rgb(96, 146, 96); /* Цвет фона */
+    background-color: #ffffff; /* Цвет фона */
+  
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+
+}
+.status-block:hover {
+    border-color: #007bff; /* Цвет границы при наведении */
+    transform: scale(1.03);
+}
+.status-block p{
+    margin: 0 5px;
+}
+.status-block img{
+    width: 25px;
+    margin: 0 5px;
+}
+.excel-block{
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    border-radius: 10px; /* Закругление углов */
+    text-align: center;
+    margin: 20px 0;
+    color: #111111;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #fff;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.excel-block:hover {
+    border-color: #007bff; /* Цвет границы при наведении */
+    transform: scale(1.03);
+}
+
+.excel-block p{
+    margin: 0 5px;
+}
+.excel-block img{
+    width: 25px;
+    margin: 0 5px;
+}
+
+
+.date-container{
+    margin: 0px 20px ;
+    display: flex;
+    flex-direction: column;
+}
+.h3-date{
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-weight: 500;
+}
+.date-block {
+    width: 220px; /* Ширина Select по размеру контейнера */
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+
+}
+  
+.wight-block{
+    width: 220px; /* Ширина Select по размеру контейнера */
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 20px 0 0 0;
+}
+
+.place-parcel{
+    margin: 10px 0 0 0;
+
+}
+
+.scaner-block{
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Закругление углов */
+    text-align: center;
+    margin: 20px 0;
+    color: #111111;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #fff;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.scaner-block:hover {
+    border-color: #007bff; /* Цвет границы при наведении */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.scaner-block p{
+    margin: 0 5px;
+}
+.scaner-block img{
+    width: 25px;
+    margin: 0  20px 0 0;
+
+}
+
+.scaner-input{
+    padding: 15px 20px;
+    border-radius: 10px; /* Закругление углов */
+    width: 100%;
+}
+.scaner-input::placeholder{
+    color: #111111;
+}
+
+
+.scaner-block.focus {
+    border-color: #007bff;
+}
+
+/* Tracks section styles */
+.tracks-section{
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(18, 18, 18, 0.04);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.tracks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tracks-header h4{margin:0}
+.tracks-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tracks-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding:6px}
+.track-item{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:#fbfbfb}
+.track-item-left{display:flex;align-items:center;gap:10px}
+.track-item-right{display:flex;align-items:center;gap:8px}
+.track-main strong{font-size:14px}
+.track-count-badge{background:#01DA01;color:#fff;padding:6px 10px;border-radius:16px;font-weight:600}
+
+/* Modal polishing */
+.modal{position:fixed;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:1000}
+.modal-content{background:#fff;padding:18px;border-radius:8px;min-width:320px;max-width:560px;box-shadow:0 8px 32px rgba(0,0,0,0.12)}
+.modal-fields input,.modal-fields textarea,.modal-fields select{width:100%;padding:8px;border:1px solid #e6e6e6;border-radius:6px;margin-bottom:8px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+
+/* menu */
+.more-btn{background:transparent;border:none;font-size:20px;cursor:pointer;padding:6px;line-height:1;color:#333}
+.more-menu{position:absolute;right:8px;top:36px;background:#fff;border:1px solid rgba(0,0,0,0.06);box-shadow:0 10px 30px rgba(0,0,0,0.12);border-radius:6px;z-index:200;min-width:170px}
+.more-menu button{display:block;width:100%;padding:10px 12px;border:none;background:transparent;text-align:left;cursor:pointer;color:#111}
+.more-menu button:hover{background:#f6f7fb}
+
+/* contrast adjustments */
+.track-item-left strong{color:#111;font-weight:700}
+.track-main small{color:#555}
+
+/* Buttons */
+.filter-point{background:#f5f7fb;border:1px solid #e6e9ef;padding:8px 12px;border-radius:6px;cursor:pointer}
+.filter-point:hover{box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.btn-cancel{background:#fff;border:1px solid #dcdcdc;padding:8px 12px;border-radius:6px;cursor:pointer}
+
+/* Responsive */
+@media (max-width: 768px){
+  .tracks-list{max-height:320px}
+  .modal-content{width:92%;min-width:unset}
+  .tracks-controls{gap:6px}
+}
+
+
+/* Focused user card */
+.focused-user-card{
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 18px;
+    border-radius: 10px;
+    margin: 16px 0;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.06);
+}
+.focused-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.focused-header .header-left{display:flex;align-items:center;gap:12px}
+.avatar{width:56px;height:56px;border-radius:50%;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-fallback{font-weight:700;color:#111}
+.user-name{margin:0;font-size:18px}
+.user-sub{font-size:13px;color:#666}
+.focused-grid{display:grid;grid-template-columns: 1fr 1fr;gap:18px}
+.focused-col{background:transparent}
+.focused-col h4{margin-top:0;margin-bottom:8px}
+
+/* Tracks full-width section below the grid */
+.tracks-section{background:#fff;border:1px solid rgba(0,0,0,0.06);padding:14px;border-radius:10px;margin-top:16px;box-shadow:0 6px 24px rgba(0,0,0,0.04);width:100%;max-width:100%;box-sizing:border-box;overflow-x:hidden}
+.tracks-section.expanded{padding:18px}
+.tracks-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.tracks-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 4px;min-width:0}
+/* Flat, MUI-like buttons: single color, consistent size, easy tap targets */
+.tracks-controls .filter-point{padding:8px 14px;border-radius:8px;border:0;background:#4caf50;color:#fff;cursor:pointer;box-shadow:0 2px 6px rgba(76,175,80,0.12);flex:0 1 auto;white-space:nowrap;min-width:100px;text-align:center;height:36px;display:inline-flex;align-items:center;justify-content:center;font-weight:600}
+.tracks-controls .filter-point.secondary{background:#fff;color:#111;border:1px solid rgba(0,0,0,0.08);box-shadow:none}
+.tracks-controls .filter-point.action-btn{background:#fff;color:#111;border:1px solid rgba(0,0,0,0.08);box-shadow:none;font-weight:600}
+.tracks-controls .filter-point.ghost{background:transparent;color:#111;border:1px solid rgba(0,0,0,0.06)}
+.tracks-controls .filter-point:hover{filter:brightness(0.96)}
+.tracks-controls .filter-point.active{box-shadow:0 6px 20px rgba(46,125,50,0.14);transform:translateY(-1px)}
+
+/* bulk action variants */
+.filter-point.bulk-action.primary{background:#2e7d32;color:#fff}
+.filter-point.bulk-action.danger{background:#e53935;color:#fff}
+
+.tracks-controls input[type="date"], .tracks-controls select{padding:8px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);flex:0 1 auto;height:36px}
+.tracks-slider{width:180px;max-width:35%;accent-color:#4caf50}
+.slider-track-value{font-size:12px;color:#666;margin-left:8px}
+
+/* Style the range thumb/track to neutral green (removes purple) */
+.tracks-slider::-webkit-slider-runnable-track{height:6px;background:#e6e6e6;border-radius:999px}
+.tracks-slider::-webkit-slider-thumb{-webkit-appearance:none;margin-top:-6px;width:16px;height:16px;border-radius:999px;background:#4caf50;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.12)}
+.tracks-slider::-moz-range-track{height:6px;background:#e6e6e6;border-radius:999px}
+.tracks-slider::-moz-range-thumb{width:16px;height:16px;border-radius:999px;background:#4caf50;border:3px solid #fff}
+
+/* status count badge */
+.status-count{background:rgba(255,255,255,0.18);padding:4px 8px;border-radius:999px;margin-left:8px;font-size:12px;color:#fff;font-weight:600}
+.status-text-inner{margin-right:6px}
+
+/* Three-dot menu should not push layout */
+.more-btn{width:36px;height:36px;border-radius:8px;border:0;background:transparent;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.more-btn:hover{background:rgba(0,0,0,0.04)}
+.more-menu{position:absolute;right:10px;top:44px;background:#fff;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.12);width:220px;z-index:3000;padding:6px;overflow:hidden}
+.more-menu button{display:block;width:100%;padding:8px 12px;border-radius:6px;border:none;background:transparent;text-align:left;cursor:pointer;color:#111}
+.more-menu button:hover{background:#f6f7fb}
+
+/* If menu would overflow at bottom, allow it to flip with CSS max-height and scroll */
+.more-menu{max-height:360px;overflow:auto}
+
+@media (max-width:900px){
+  .tracks-controls{gap:6px;padding:8px}
+  .tracks-controls .filter-point{min-width:96px;padding:8px 10px}
+}
+@media (max-width:700px){
+  .tracks-controls .filter-point{flex:1 1 100%;width:100%;box-sizing:border-box;min-width:0}
+  .tracks-controls{gap:8px;padding:8px}
+  .tracks-slider{width:100%;max-width:100%}
+  .more-menu{right:6px;left:6px;top:auto;bottom:46px}
+}
+.tracks-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding:6px;width:100%;max-width:100%;box-sizing:border-box;transition:max-height .25s}
+.tracks-list.expanded{max-height:900px}
+.track-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);background:#fafafa}
+.track-item-left{display:flex;gap:12px;align-items:center;flex:1}
+.more-menu button:hover{background:#eef6ff}
+@media (max-width:768px){.tracks-slider{width:60%;max-width:100%}}
+.track-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);background:#fafafa}
+.track-item-left{display:flex;gap:10px;align-items:center}
+.track-item-right{display:flex;gap:8px;align-items:center}
+.track-count-badge{background:#111;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px}
+@media (max-width:1100px){.focused-grid{grid-template-columns:1fr}.tracks-controls{flex-direction:column;align-items:flex-start}.tracks-controls .filter-point{width:100%}}
+
+.info-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed rgba(0,0,0,0.03)}
+.info-row span{color:#666}
+.invoices-list{display:flex;flex-direction:column;gap:8px}
+.invoice-entry{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:#fff}
+.invoice-left{display:flex;flex-direction:column}
+.invoice-date{font-weight:600}
+.badge{padding:6px 10px;border-radius:999px;font-size:13px;font-weight:600}
+.badge-paid{background:#d1fae5;color:#065f46}
+.badge-pending{background:#fde68a;color:#92400e}
+.status-group{margin-bottom:12px;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:#fafafa}
+.track-entry{padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.04)}
+.track-entry:last-child{border-bottom:0}
+.track-main{display:flex;align-items:center;justify-content:space-between}
+.track-history{margin-top:6px}
+.track-history summary{cursor:pointer}
+.muted{color:#666}
+.focused-actions .btn-cancel{background:#f3f4f6;border:0;padding:8px 12px;border-radius:6px}
+
+@media (max-width: 1100px){
+  .focused-grid{grid-template-columns: 1fr 1fr}
+}
+@media (max-width: 700px){
+  .focused-grid{grid-template-columns: 1fr}
+  .invoice-entry{flex-direction:column;align-items:flex-start}
+  .badge{margin-top:8px}
+}
+
+
+.status-pop:hover{
+    background-color: #fff;
+}
+
+
+.modalExcel{
+    position: fixed;
+    top: 40px;
+    left: 280px;
+    background-color: #fff;
+    width: 75%;
+    height: 80%;
+
+    border: 1px solid #ccc;
+    padding: 20px 30px 40px 30px;
+    border-radius: 10px; /* Закругление углов */
+    text-align: center;
+    margin: 20px 0;
+    color: #111111;
+    background-color: #ffffff; /* Цвет фона */
+    border-color: #007bff; /* Цвет границы при наведении */
+  
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Generic modal */
+.modal{
+  position: fixed;
+  top:0;left:0;right:0;bottom:0;
+  background: rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;z-index:2000
+}
+.modal-content{
+  background:#fff;padding:20px;border-radius:10px;max-width:600px;width:100%;box-shadow:0 6px 30px rgba(0,0,0,0.08)
+}
+.modal-fields{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.modal-fields input{padding:8px;border-radius:6px;border:1px solid rgba(0,0,0,0.06)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+.modal-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.modal-header h2{
+    font-size: 23px;
+    font-weight: 500;
+    color: #303030;
+
+}
+.close{
+    width: 20px;
+    height: 20px;
+    background-image: url('../../../assets/img/closeA.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.close:hover{
+    background-image: url('../../../assets/img/closeB.png');
+
+}
+
+
+
+
+.textarea{
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Закругление углов */
+    margin: 30px 0 0 0;
+    color: #111111;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #fff;
+    padding: 20px;
+    height: 100%;
+
+}
+.textarea:hover {
+    border-color: #007bff; /* Цвет границы при наведении */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+
+
+
+.buttonExcel{
+    margin-top: 10px;
+    background-color: #4285F4;
+    background-color: green;
+    color: #FFFFFF;
+    padding: 10px;
+    border: none;
+    border-radius:4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration:  0.3s;
+}
+.buttonExcel:hover{
+    background-color: #4285F4;
+
+}
+
+
+.modal-load{
+    z-index: 10000;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    width: 225px;
+    height: 100px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Закругление углов */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-load img{
+    width: 30px;
+    
+  }
+
+.modal-load p{
+    font-weight: 500;
+    margin: 0 0 0 10px;
+}
+
+.loading img{
+    display: inline-block;
+    animation: rotate 2s linear infinite;
+    
+  }
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+
+
+
+  /* UserList */
+
+
+.users-container{
+    width: 100%;
+    height: 100%;
+
+    padding: 20px 5px;
+
+}
+
+.header-bar{
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #ffffff; /* Цвет фона */
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);    
+
+}
+
+.search-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f8f8; /* Цвет фона */
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    cursor:text;
+
+}
+
+.search-bar:hover{
+    border-color: #007bff; /* Цвет границы при наведении */
+
+}
+.searchIcon{
+    width: 17px;
+}
+.searchInput{
+    width: 150px;
+    background-color: #f8f8f8; /* Цвет фона */
+    margin-left: 10px;
+}
+.filter-bar{
+    display: flex;
+    align-items: center;
+
+}
+
+.filter-point{
+    background-color: #f1f1f1; /* Цвет фона */
+    border: 1px solid #ccc;
+    padding: 11px;
+    border-radius: 5px;
+    cursor:pointer;
+    font-size: 14px;
+    margin-left: 15px;
+    transition-duration: 0.3s;
+}
+
+.filter-point:hover{
+    border-color: #007bff; /* Цвет границы при наведении */
+    background-color: #fff;
+}
+.filter-point-active{
+    background-color: #fff;
+    border-color: #007bff; /* Цвет границы при наведении */
+
+}
+
+.status-filter{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative; 
+}
+
+.statuses-popup {
+    position: absolute;
+    top: 100%; /* Position it below the filter-point */
+    left: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 5px 5px 0 5px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+.filter-point-status{
+    background-color: #f1f1f1; /* Цвет фона */
+    border: 1px solid #ccc;
+    padding: 11px;
+    border-radius: 5px;
+    cursor:pointer;
+    font-size: 14px;
+    transition-duration: 0.3s;
+    margin: 0 0 5px 0 ;
+}
+
+
+/*  */
+.page-point{
+    background-color: #f1f1f1; /* Цвет фона */
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor:pointer;
+    font-size: 12px;
+    margin-left: 20px;
+    transition-duration: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.page-point:hover{
+    border-color: #007bff; /* Цвет границы при наведении */
+}
+
+.page-point input{
+    width: 50px;
+    padding: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+}
+
+.page-point input:focus{
+    border-color: #007bff; /* Цвет границы при наведении */
+}
+
+.table-user{
+    margin: 10px 0 0 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #ffffff; /* Цвет фона */
+    padding: 5px;
+}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+  
+.table th, .table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.table thead {
+    background-color: #EEEEEE;
+}
+
+/* settings */
+
+.inputs-wrapper{
+    padding: 20px 0 0 0;
+    
+}
+
+.settingsGet{
+    padding: 20px;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+    white-space: pre-wrap;
+
+}
+
+
+.date-container_mobile{
+    display: none;
+}
+
+.page-point-bar{
+    margin-top: 20px ;
+    display: flex;
+    justify-content: center;
+}
+
+
+.inputs-wrapper-price{
+    padding: 10px  0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.inputs-wrapper-contacts{
+    margin-top: 20px;
+}
+
+.miniButton-container{
+    display: flex;
+    
+}
+
+.miniButton{
+    padding: 12px;
+    background-color: rgb(195, 208, 228);
+    margin-left: 10px;
+    border-radius: 7px;
+    border: 1px solid  rgb(195, 208, 228);
+    cursor: pointer;
+}
+
+.miniButton:hover{
+    background-color: rgb(195, 208, 228);
+    border: 1px solid rgb(157, 168, 185) ;
+}
+
+.miniButton-active{
+    background-color: rgb(64, 151, 64);
+    color: #fff;
+    border: 1px solid rgb(64, 151, 64) ;
+}
+
+.miniButton-active:hover{
+    background-color: rgb(64, 151, 64);
+    border: 1px solid rgb(64, 151, 64) ;
+}
+
+.priceCurrency{
+    padding: 0 0 0 10px;
+    background-color: #f3f3f3;
+
+}
+
+
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #ddd;
+    cursor: pointer;
+  }
+  
+.tdUserTrack{
+    padding: 4px 10px;
+    background-color: #99fdbb;
+    border-radius: 5px;
+}
+
+
+.tdUserTrack.user-unknown {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+
+.totalCount{
+    margin: 10px 0 0 15px;
+    padding: 10px;
+    background-color: #e9e9e9;
+    border-radius: 10px;
+    font-size: 12px;
+    width: 200px;
+    text-align: center;
+}
+
+
+.add-lost-item-button {
+    margin-left: 12px; /* Отступ от поля поиска */
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-lost-item-button:hover {
+    background-color: #0056b3;
+}
+
+.buttonExcelLost{
+    background-color: #007bff;
+
+}
+
+.buttonExcelLost:hover{
+    background-color: #007bff;
+
+}
+
+.header-bar-client{
+    margin-top: 10px;
+    padding: 5px;
+}
+.search-bar-client{
+    width: 100%;
+    border-radius: 0;
+    border-radius: 6px;
+}
+
+.searchInput-client{
+    width: 100%;
+}
+.totalCount-client{
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+.page-point-bar-client{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.page-point-client{
+    margin: 0;
+}
+.page-point-client2{
+    margin: 0;
+    padding: 15px;
+}
+
+
+/* bonus */
+/* Основные стили для таблицы бонусов */
+.bonus-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.bonus-table th, .bonus-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.bonus-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+/* Стили для кнопок в таблице */
+.bonus-table button {
+    background-color: #007bff; /* Основной цвет кнопок */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+    border-radius: 4px; /* Закругленные углы */
+    padding: 8px 12px; /* Отступы */
+    cursor: pointer; /* Курсор в виде руки */
+    font-size: 14px; /* Размер шрифта */
+    transition: background-color 0.3s, transform 0.2s; /* Плавные переходы */
+}
+
+.bonus-table button:hover {
+    background-color: #0056b3; /* Цвет при наведении */
+}
+
+.bonus-table button:active {
+    transform: scale(0.98); /* Уменьшаем кнопку при нажатии */
+}
+
+.referrals-section {
+    margin-top: 20px;
+}
+
+.referrals-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Обеспечивает, что модальное окно находится поверх других элементов */
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: #f00;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.partner{
+    padding: 30px;
+}
+
+
+
+/* Стили для формы поиска */
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Отступ снизу для отделения от таблицы */
+}
+
+.search-form input {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1; /* Поле ввода занимает все доступное пространство */
+    margin-right: 10px; /* Отступ справа от поля ввода */
+}
+
+.search-form button {
+    padding: 8px 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff; /* Синий цвет кнопки */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3; /* Темнее синий при наведении */
+}
+
+.search-form button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+
+.title-percent{
+    margin-top: 45px;
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+
+}
+
+
+/* баннеры */
+.banner-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid rgba(129, 129, 129, 0.3);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);    
+}
+
+.banners {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: scroll; /* Горизонтальный скролл */
+    white-space: nowrap; /* Запрещает перенос элементов на новую строку */
+}
+
+.banner {
+    width: 140px;
+    height: 90px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-right: 15px;
+    flex-shrink: 0; /* Предотвращает изменение размера баннеров */
+    scroll-snap-align: start; /* Привязывает баннер к началу при скролле */
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(134, 134, 134, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сохранение пропорций изображения */
+    border-radius: 10px;
+}
+
+.banner span {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-user {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+  }
+  
+  .modal-fields {
+    margin-bottom: 20px;
+  }
+  
+  .modal-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .modal-field label {
+    font-weight: bold;
+    flex-basis: 40%;
+  }
+  
+  .modal-field span,
+  .modal-field input {
+    flex-basis: 55%;
+  }
+  
+  .modal-field input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .save-btn {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+  
+  .save-btn:hover {
+    background-color: #218838;
+  }
+  
+  .cancel-btn {
+    background-color: #dc3545;
+    color: #ffffff;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  
+
+  .edit-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .edit-btn:active {
+    transform: scale(0.98);
+  }
+  
+
+
+.tableheader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px;
+}
+
+.tableheader button{
+    padding: 5px 7px;
+    border-radius: 5px;
+}
+
+
+/* Прячем Sidebar и показываем бургер-меню на мобильных устройствах */
+@media (max-width: 768px) {
+    
+    .dashboard{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .mainAdmin{
+        background-color: #f7f7f7;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard > *:not(.mainAdmin) {
+        display: none;
+    }
+    
+    .title-admin{
+        display: none;
+    }
+
+    .sidebar-mobile{
+        
+        display: flex;
+
+    
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-users-container {
+    padding: 20px;
+  }
+  
+  .custom-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .custom-search-bar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-search-icon {
+    margin-right: 10px;
+  }
+  
+  .custom-search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .custom-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .custom-filter-point {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .custom-filter-point-active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .custom-status-filter {
+    position: relative;
+  }
+  
+  .custom-statuses-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  .custom-filter-point-status {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .custom-total-count {
+    margin-top: 20px;
+  }
+  
+  .custom-table-user {
+    margin-top: 20px;
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .custom-invoice-status {
+    cursor: pointer;
+    color: white; /* Белый цвет текста для общего стиля */
+    padding: 5px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  
+  .custom-invoice-status.custom-invoice-no-invoices {
+    background-color: #808080; /* Серый фон для "Нет счетов" */
+  }
+  
+  .custom-invoice-status.custom-invoice-paid {
+    background-color: #4caf50; /* Зеленый фон для "Оплачено" */
+  }
+  
+  .custom-invoice-status.custom-invoice-pending {
+    background-color: #f44336; /* Красный фон для "Неоплачено" */
+  }
+  
+
+  
+  
+  .custom-edit-btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .custom-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+    height: 80%;
+    overflow: scroll;
+  }
+  .header_custom_modal{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .custom-modal-fields {
+    margin-top: 10px;
+  }
+  
+  .custom-modal-field {
+    margin-bottom: 15px;
+  }
+  
+  .custom-modal-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .custom-btn {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+ 
+  
+  .custom-invoice-list {
+    margin-top: 20px;
+  }
+  
+  .custom-invoice-card {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .custom-invoice-pending {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .custom-invoice-paid {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .custom-invoice-tracks {
+    margin-top: 10px;
+  }
+  
+
+  .custom-confirm-btn {
+    padding: 8px 12px;
+    background-color: #fff;
+    color: #111111;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .custom-confirm-btn:hover {
+    background-color: #e4e4e4;
+    color: #111111;
+  }
+  
+
+
+  
+.modal-overlay2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal2 {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    min-width: 300px;
+  }
+  
+  .modal2 input{
+    margin: 10px 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+  
+  .modal-buttons2 {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .modal-buttons2 button {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    background-color: #c25757;
+    color: #fff;
+  }
+  
+  .error2 {
+    color: red;
+  }
+  
+  .success2 {
+    color: green;
+  }
+  
+  .sbros-button{
+    background-color: #c25757;
+    color: #fff;
+    padding: 3px;
+    border-radius: 4px;
+  }
+
+
+
+  .tracks-list {
+    max-height: 300px; /* Ограничение максимальной высоты */
+    overflow-y: auto;  /* Вертикальная прокрутка */
+    padding: 0 10px;   /* При необходимости можно добавить отступы */
+    width: 300px;
+  }
+  
+
+
+
+  .modal-overlay3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal3 {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 320px;
+    max-width: 500px;
+    width: 100%;
+    height: 500px;
+    overflow-y: scroll;
+  }
+  
+  .modal3-header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal3 input {
+    margin: 10px 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  
+  .invoice-entry {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+  
+  .invoice-entry.paid {
+    border-left: 5px solid green;
+  }
+  
+  .invoice-entry.pending {
+    border-left: 5px solid red;
+  }
+  
+  .invoice-entry p {
+    margin: 4px 0;
+  }
+  
+  .invoice-button {
+    background-color: #4a90e2;
+    color: #fff;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .invoice-button:hover {
+    background-color: #3a78c2;
+  }
+  
+  .btn-green{
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    background-color: green;
+  }
+  .btn-blue{
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    background-color: #4a90e2;
+    margin: 0 10px;
+  }
+  .btn-blue:hover{
+    background-color: #3a78c2;
+
+  }
+  .btn-red{
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    background-color: #bd4040;
+
+  }
+  .btn-red:hover {
+    background-color: #a84545;
+  }
+
+
+
+  
+.filial-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filial-button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filial-button.edit {
+    background-color: #4CAF50;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.filial-button.edit:hover {
+    background-color: #45a049;
+}
+
+.filial-button.delete {
+    background-color: #f44336;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.filial-button.delete:hover {
+    background-color: #d32f2f;
+}
+
+
+.scanner-btn {
+  background: #4cafef;
+  color: white;
+  margin: 0 0 0 10px;
+  padding: 2px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.scanner-btn:hover {
+  background: #1c8cd6;
+}
+
+.scanner-video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  margin: 15px auto;
+  display: block;
+}

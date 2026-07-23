@@ -1,0 +1,313 @@
+.admins-list {
+  padding: 30px;
+  background-color: #1a1a1a;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.admins-list h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Контролы */
+.admins-list .controls {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.admins-list .filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admins-list .filter-group label {
+  color: #2B86A5;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admins-list .filter-group select {
+  padding: 10px 15px;
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admins-list .filter-group select:hover:not(:disabled) {
+  border-color: #2B86A5;
+}
+
+.admins-list .filter-group select:focus {
+  outline: none;
+  border-color: #2B86A5;
+  box-shadow: 0 0 8px rgba(43, 134, 165, 0.3);
+}
+
+.admins-list .filter-group select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admins-list .refresh-btn {
+  padding: 10px 20px;
+  background-color: #2B86A5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admins-list .refresh-btn:hover:not(:disabled) {
+  background-color: #1f5d7f;
+  transform: scale(1.05);
+}
+
+.admins-list .refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Сообщения об ошибке */
+.admins-list .message {
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admins-list .message.error {
+  background-color: #c0392b;
+  color: white;
+  border-left: 4px solid #e74c3c;
+}
+
+/* Сетка карточек */
+.admins-list .admins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Карточка администратора */
+.admin-card {
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card:hover {
+  border-color: #2B86A5;
+  box-shadow: 0 5px 20px rgba(43, 134, 165, 0.2);
+}
+
+/* Заголовок карточки */
+.card-header {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background-color: #252525;
+  border-bottom: 1px solid #3a3a3a;
+  align-items: center;
+}
+
+.role-badge,
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+}
+
+.role-badge {
+  flex: 1;
+}
+
+.status-badge {
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-badge.active {
+  background-color: #27ae60;
+}
+
+.status-badge.inactive {
+  background-color: #e74c3c;
+}
+
+/* Содержимое карточки */
+.card-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.card-content h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #fff;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.info-row .label {
+  font-size: 12px;
+  color: #2B86A5;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.info-row .value {
+  font-size: 12px;
+  color: #d8d8d8;
+  text-align: right;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Подвал карточки */
+.card-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background-color: #252525;
+  border-top: 1px solid #3a3a3a;
+}
+
+.edit-btn,
+.deactivate-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background-color: #2B86A5;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1f5d7f;
+}
+
+.deactivate-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.deactivate-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Пустое состояние */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  border: 1px dashed #3a3a3a;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .admins-list {
+    padding: 15px;
+  }
+
+  .admins-list h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .admins-list .controls {
+    flex-direction: column;
+  }
+
+  .admins-list .filter-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .admins-list .filter-group select {
+    width: 100%;
+  }
+
+  .admins-list .refresh-btn {
+    width: 100%;
+  }
+
+  .admins-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-row {
+    flex-direction: column;
+  }
+
+  .info-row .label {
+    min-width: auto;
+  }
+
+  .info-row .value {
+    text-align: left;
+  }
+
+  .card-footer {
+    flex-direction: column;
+  }
+
+  .edit-btn,
+  .deactivate-btn {
+    width: 100%;
+  }
+}
