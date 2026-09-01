@@ -168,11 +168,42 @@ router.get('/:userId/getBookmarks', async (req, res) => {
                 visibleHistory.push({ status: track.status, date: track.updatedAt || track.createdAt || new Date() });
             }
 
+            const buildDerivedStatus = (historyArray) => {
+                const resolvedHistory = (historyArray || []).map(item => ({
+                    ...item,
+                    statusText: item.status && item.status.statusText ? item.status.statusText : null
+                }));
+
+                if (resolvedHistory.length === 0) return { statusText: 'Неизвестен', statusId: null };
+
+                const lastStatus = resolvedHistory[resolvedHistory.length - 1];
+                const previousStatus = resolvedHistory[resolvedHistory.length - 2] || null;
+
+                if (lastStatus && lastStatus.statusText === 'Получено' && previousStatus) {
+                    const previousStatusText = previousStatus?.statusText;
+                    if (previousStatusText && previousStatusText.startsWith('Прибыло в филиал ')) {
+                        return { statusText: previousStatusText, statusId: previousStatus.status?._id || previousStatus.status || null };
+                    }
+                }
+
+                if (lastStatus && lastStatus.statusText && lastStatus.statusText.startsWith('Прибыло в филиал ')) {
+                    return { statusText: lastStatus.statusText, statusId: lastStatus.status?._id || lastStatus.status || null };
+                }
+
+                const statusObject = lastStatus && lastStatus.status ? lastStatus.status : track.status;
+                const statusText = statusObject && statusObject.statusText ? statusObject.statusText : 'Неизвестен';
+                return {
+                    statusText,
+                    statusId: statusObject && statusObject._id ? statusObject._id : null,
+                };
+            };
+
+            const derivedStatus = buildDerivedStatus(visibleHistory);
             const limitedHistory = visibleHistory.slice(-historyLimit);
             const lastVisible = limitedHistory[limitedHistory.length - 1] || visibleHistory[visibleHistory.length - 1] || null;
             const statusObject = lastVisible && lastVisible.status ? lastVisible.status : track.status;
-            const statusText = statusObject && statusObject.statusText ? statusObject.statusText : 'Неизвестен';
-            const statusId = statusObject && statusObject._id ? statusObject._id : null;
+            const statusText = derivedStatus.statusText;
+            const statusId = derivedStatus.statusId || (statusObject && statusObject._id ? statusObject._id : null);
             const lastUpdateAt = lastVisible && lastVisible.date ? lastVisible.date : track.updatedAt || track.createdAt || bookmark.createdAt;
 
             if (!bookmark.currentStatus || String(bookmark.currentStatus) !== String(statusId)) {

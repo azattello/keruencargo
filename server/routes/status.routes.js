@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Status = require('../models/Status');
+const User = require('../models/User');
+const Filial = require('../models/Filial');
 const {check, validationResult} = require("express-validator")
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 // Маршрут для создания нового статуса
 router.post('/addStatus', [check('statusText', 'Минимум 2 буквы').isLength({min: 2})], 
@@ -37,51 +41,100 @@ async (req, res) => {
 // Маршрут для получения всех статусов
 router.get('/getStatus', async (req, res) => {
   try {
-    // Получаем все статусы из базы данных
-    const statuses = await Status.find().sort({ createdAt: -1 });
-    console.log('Statuses found:', statuses.length);
+    let currentUser = null;
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (token) {
+        const decoded = jwt.verify(token, config.get('secretKey'));
+        currentUser = await User.findById(decoded.id).lean();
+      }
+    } catch (tokenErr) {
+      console.log('⚠️ No valid token for status request');
+    }
 
-    // Получаем количество треков для каждого статуса
+    const receivedStatus = await Status.findOne({ statusText: 'Получено' }).lean();
+    const receivedStatusNumber = receivedStatus?.statusNumber || 999;
+
+    const getFilialArrivalStatusText = (filialName) => {
+      const text = String(filialName || '').trim();
+      return text ? `Прибыло в филиал ${text}` : null;
+    };
+
+    const ensureFilialArrivalStatus = async (filialName) => {
+      const statusText = getFilialArrivalStatusText(filialName);
+      if (!statusText) return null;
+
+      let statusDoc = await Status.findOne({ statusText }).lean();
+      if (!statusDoc) {
+        const lastStatus = await Status.findOne().sort({ statusNumber: -1 }).lean();
+        const nextStatusNumber = (lastStatus?.statusNumber || 0) + 1;
+        statusDoc = await Status.create({ statusText, statusNumber: nextStatusNumber });
+      }
+
+      return statusDoc;
+    };
+
+    let userFilialStatus = null;
+    if (currentUser && ['filial', 'client'].includes(currentUser.role)) {
+      const ownFilialName = String(currentUser.selectedFilial || '').trim();
+      if (ownFilialName) {
+        userFilialStatus = await ensureFilialArrivalStatus(ownFilialName);
+      }
+    }
+
+    let statuses = await Status.find().sort({ statusNumber: 1 }).lean();
+
+    if (currentUser && currentUser.role === 'filial') {
+      statuses = [userFilialStatus, receivedStatus].filter(Boolean);
+    } else if (currentUser && currentUser.role === 'client') {
+      const visibleStatuses = statuses.filter(s => {
+        if (s.statusText && s.statusText.startsWith('Прибыло в филиал ')) {
+          return false;
+        }
+        return s.statusNumber <= receivedStatusNumber;
+      });
+
+      if (userFilialStatus) {
+        const filteredVisible = visibleStatuses.filter(s => s._id.toString() !== userFilialStatus._id.toString());
+        const receivedIndex = filteredVisible.findIndex(s => s._id.toString() === receivedStatus?._id.toString());
+
+        if (receivedIndex >= 0) {
+          filteredVisible.splice(receivedIndex, 0, userFilialStatus);
+          statuses = filteredVisible;
+        } else {
+          statuses = [...filteredVisible, userFilialStatus];
+        }
+      } else {
+        statuses = visibleStatuses;
+      }
+    } else if (currentUser && (currentUser.role === 'admin' || currentUser.role === 'china')) {
+      statuses = statuses.filter(s => !/^Прибыло в филиал\s/.test(s.statusText || ''));
+    }
+
     let statusCounts = [];
     try {
+      const statusIds = statuses.map(s => s._id);
       statusCounts = await Status.aggregate([
-        {
-          $lookup: {
-            from: 'tracks',
-            localField: '_id',
-            foreignField: 'status',
-            as: 'tracks'
-          }
-        },
-        {
-          $project: {
-            _id: 1,
-            statusText: 1,
-            count: { $size: '$tracks' }
-          }
-        }
+        { $match: { _id: { $in: statusIds } } },
+        { $lookup: { from: 'tracks', localField: '_id', foreignField: 'status', as: 'tracks' } },
+        { $project: { _id: 1, statusText: 1, count: { $size: '$tracks' } } }
       ]);
-      console.log('Status counts:', statusCounts);
     } catch (aggError) {
-      console.error('Aggregation error:', aggError);
-      // Fallback: count manually
+      console.error('❌ Aggregation error:', aggError);
       statusCounts = [];
       for (const status of statuses) {
+        const Track = require('../models/Track');
         const count = await Track.countDocuments({ status: status._id });
         statusCounts.push({ _id: status._id, statusText: status.statusText, count });
       }
     }
 
-    // Объединяем статусы с counts
-    const statusesWithCounts = statuses.map(status => {
-      const countData = statusCounts.find(sc => sc._id.toString() === status._id.toString());
-      return {
-        ...status.toObject(),
-        count: countData ? countData.count : 0
-      };
-    });
+    const countMap = new Map(statusCounts.map(sc => [sc._id.toString(), sc.count]));
+    const statusesWithCounts = statuses.map(status => ({
+      ...status,
+      count: countMap.get(status._id.toString()) || 0
+    }));
 
-    // Отправляем список статусов в ответ на запрос
     res.status(200).json(statusesWithCounts);
   } catch (error) {
     console.error('Error in /api/status/getStatus:', error);

@@ -16,6 +16,8 @@ const referralRouter = require('./routes/referral.routes');
 const invoiceRouter = require('./routes/invoice.routes');
 const notificationRouter = require('./routes/notification.routes');
 const announcementRouter = require('./routes/announcement.routes');
+const courseRouter = require('./routes/course.routes');
+const sendingRouter = require('./routes/sending.routes');
 const uploadesRouter = require('./routes/uploades.routes');
 const corsMiddleware = require('./middleware/cors.middleware');
 const path = require('path');
@@ -57,6 +59,8 @@ app.use('/api/referral', referralRouter);  // Маршруты для партн
 app.use('/api/invoice', invoiceRouter);
 app.use('/api/notification', notificationRouter);  // Маршруты для уведомлений
 app.use('/api/announcement', announcementRouter);  // Маршруты для объявлений
+app.use('/api/course', courseRouter);
+app.use('/api/sending', sendingRouter);
 
 // Маршрут для скачивания файла
 app.get('/api/download/:filename', (req, res) => {
@@ -96,38 +100,38 @@ const listenWithRetry = (port, attempt = 1) => {
 };
 
 // Запуск сервера
-// const start = async () => {
-//     try {
-//         await mongoose.connect(config.get('dbUrl'));
-//         await listenWithRetry(PORT);
-//     } catch (error) {
-//         console.error(error);
-//         process.exit(1);
-//     }
-// };
+const start = async () => {
+    try {
+        await mongoose.connect(config.get('dbUrl'));
+        await listenWithRetry(PORT);
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+};
 
 
 
 
 // HTTPS options
-const httpsOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/fullchain.pem')
-};
+// const httpsOptions = {
+//     key: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/privkey.pem'),
+//     cert: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/fullchain.pem')
+// };
 
-const start = async () => {
-    try {
-        await mongoose.connect(config.get('dbUrl'));
+// const start = async () => {
+//     try {
+//         await mongoose.connect(config.get('dbUrl'));
 
-        // Create HTTPS server
-        https.createServer(httpsOptions, app).listen(PORT, () => {
-            console.log("Server started on the port ", PORT);
-        });
+//         // Create HTTPS server
+//         https.createServer(httpsOptions, app).listen(PORT, () => {
+//             console.log("Server started on the port ", PORT);
+//         });
         
-    } catch (error) {
-        console.log(error);
-    }
-}
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 
 start();

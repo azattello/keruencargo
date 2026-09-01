@@ -29,7 +29,10 @@ export const addStatus = async (statusText) => {
 // Функция для отправки запроса на получение списка статусов, отсортированных по времени создания
 export const getStatus = async () => {
   try {
-      const response = await axios.get(`${configUrl}/api/status/getStatus`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${configUrl}/api/status/getStatus`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       // Сортируем статусы по времени создания в порядке убывания
       const sortedStatuses = response.data.sort((b,a ) => new Date(b.createdAt) - new Date(a.createdAt));
       return sortedStatuses;

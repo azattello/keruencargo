@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.75143c0e.css",
-    "main.js": "/static/js/main.2b1ba9bf.js",
+    "main.js": "/static/js/main.c7e4cb56.js",
     "static/media/progress.gif": "/static/media/progress.b2380d273412f3cbaf4f.gif",
     "static/media/logo.jpg": "/static/media/logo.ca4fadb0e1cbc41ac4eb.jpg",
     "static/media/logo2.jpg": "/static/media/logo2.ca4fadb0e1cbc41ac4eb.jpg",
     "static/media/profile.png": "/static/media/profile.fc1dd056be407dbfa875.png",
     "static/media/check.png": "/static/media/check.2b1900cafb08d36389c5.png",
     "static/media/loading.png": "/static/media/loading.7326b4a2f3bee998505d.png",
+    "static/media/tracks.png": "/static/media/tracks.4a87b92191f033d0d6b3.png",
     "static/media/chinaadress.png": "/static/media/chinaadress.f0f45f5beba985307178.png",
     "static/media/dogovor.png": "/static/media/dogovor.6fb1946f4203b8be25d3.png",
     "static/media/contacts2.png": "/static/media/contacts2.8b31c4b927ec83010a43.png",
@@ -22,10 +23,10 @@
     "static/media/home-outline.svg": "/static/media/home-outline.e0a557e9edea0fd2dd3b4e19f9487932.svg",
     "static/media/layers.svg": "/static/media/layers.883e741e421ca763955adfc731705a92.svg",
     "main.75143c0e.css.map": "/static/css/main.75143c0e.css.map",
-    "main.2b1ba9bf.js.map": "/static/js/main.2b1ba9bf.js.map"
+    "main.c7e4cb56.js.map": "/static/js/main.c7e4cb56.js.map"
   },
   "entrypoints": [
     "static/css/main.75143c0e.css",
-    "static/js/main.2b1ba9bf.js"
+    "static/js/main.c7e4cb56.js"
   ]
 }

@@ -72,6 +72,12 @@ const Sidebar = ({ onNavItemClick }) => {
                   <h5 className="nav-title">Объявления</h5>
                 </div>
               )}
+              <div className={`nav-link ${selectedNavItem === "CourseManager" && "nav-active"}`} onClick={() => handleNavItemClick("CourseManager")}>
+                <h5 className="nav-title">Курсы</h5>
+              </div>
+              <div className={`nav-link ${selectedNavItem === "sendings" && "nav-active"}`} onClick={() => handleNavItemClick("sendings")}>
+                <h5 className="nav-title">Отправка</h5>
+              </div>
               <div className={`nav-link ${selectedNavItem === "myCargo" && "nav-active"}`} onClick={() => handleNavItemClick("myCargo")}>
                 <h5 className="nav-title">Мой карго</h5>
               </div>

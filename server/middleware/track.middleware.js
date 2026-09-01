@@ -3,6 +3,7 @@ const Track = require('../models/Track');
 const Settings = require('../models/Settings');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
+const Filial = require('../models/Filial');
 const Status = require('../models/Status');
 const { sendPushToUser } = require('../utils/pushHelper');
 
@@ -35,11 +36,55 @@ const resolveStatus = async (statusValue) => {
     return statusDoc;
 };
 
+const resolveFilialArrivalStatus = async (userDoc) => {
+    if (!userDoc) return null;
+
+    let filialName = userDoc.selectedFilial || '';
+    if (!filialName && userDoc.role === 'filial' && userDoc.phone) {
+        const filialDoc = await Filial.findOne({ userPhone: Number(String(userDoc.phone).replace(/\D/g, '')) }).lean();
+        filialName = filialDoc?.filialText || filialDoc?.filialName || '';
+    }
+
+    if (!filialName) return null;
+
+    const arrivalStatusText = `Прибыло в филиал ${filialName}`;
+    let arrivalStatus = await Status.findOne({ statusText: arrivalStatusText }).lean();
+    if (!arrivalStatus) {
+        const lastStatus = await Status.findOne().sort({ statusNumber: -1 }).lean();
+        const nextStatusNumber = (lastStatus?.statusNumber || 0) + 1;
+        arrivalStatus = await Status.create({ statusText: arrivalStatusText, statusNumber: nextStatusNumber });
+    }
+
+    return arrivalStatus;
+};
+
+const buildHistoryEntries = async (requestUser, statusObj, date) => {
+    if (!statusObj || !statusObj.statusText) {
+        return [{ status: statusObj?._id || null, date }].filter(entry => entry.status);
+    }
+
+    const normalizedStatusText = String(statusObj.statusText).trim();
+    if (normalizedStatusText !== 'Получено') {
+        return [{ status: statusObj._id, date }].filter(entry => entry.status);
+    }
+
+    const operator = requestUser ? await User.findById(requestUser.id || requestUser._id).select('phone role selectedFilial') : null;
+    const arrivalStatus = await resolveFilialArrivalStatus(operator || requestUser);
+    if (!arrivalStatus) {
+        return [{ status: statusObj._id, date }].filter(entry => entry.status);
+    }
+
+    return [
+        { status: arrivalStatus._id, date },
+        { status: statusObj._id, date }
+    ];
+};
+
 const updateTrack = async (req, res, next) => {
     try {
         const { track, status, date } = req.body;
 
-        const operator = req.user ? await User.findById(req.user.id).select('name phone role') : null;
+        const operator = req.user ? await User.findById(req.user.id).select('name phone role selectedFilial') : null;
         const operatorInfo = operator ? {
             userId: operator._id,
             name: operator.name || '',
@@ -55,6 +100,8 @@ const updateTrack = async (req, res, next) => {
             storedStatus = statusObj?._id || status;
         }
 
+        const historyEntries = statusObj ? await buildHistoryEntries(req.user ? { id: req.user.id } : null, statusObj, date) : [{ status: storedStatus, date }].filter(entry => entry.status);
+
         // Проверяем, существует ли трек с переданным номером
         let existingTrack = await Track.findOne({ track });
 
@@ -64,7 +111,7 @@ const updateTrack = async (req, res, next) => {
                 track,
                 trackNormalized: normalize(track),
                 status: storedStatus,
-                history: [{ status: storedStatus, date }],
+                history: historyEntries,
                 createdBy: operatorInfo,
                 updatedBy: operatorInfo
             });
@@ -73,12 +120,11 @@ const updateTrack = async (req, res, next) => {
             return res.status(201).json({ message: 'Новая запись трека успешно создана' });
         } else {
             // Если трек существует, обновляем его данные
-            const oldStatus = existingTrack.status;
             existingTrack.status = storedStatus;
             existingTrack.updatedBy = operatorInfo;
 
             // Добавляем новую запись в историю
-            existingTrack.history.push({ status: storedStatus, date });
+            existingTrack.history.push(...historyEntries);
 
             // Сохраняем обновленный трек
             await existingTrack.save();
@@ -160,7 +206,7 @@ const excelTrack = async (req, res, next) => {
     try {
         const { tracks, status, date } = req.body;
 
-        const operator = req.user ? await User.findById(req.user.id).select('name phone role') : null;
+        const operator = req.user ? await User.findById(req.user.id).select('name phone role selectedFilial') : null;
         const operatorInfo = operator ? {
             userId: operator._id,
             name: operator.name || '',
@@ -178,6 +224,8 @@ const excelTrack = async (req, res, next) => {
             storedStatus = statusObj?._id || status;
         }
 
+        const historyEntriesBase = statusObj ? await buildHistoryEntries(req.user ? { id: req.user.id } : null, statusObj, date) : [{ status: storedStatus, date }].filter(entry => entry.status);
+
         // Получаем список уже существующих треков
         const existingTracks = await Track.find({ track: { $in: tracks } });
 
@@ -188,13 +236,13 @@ const excelTrack = async (req, res, next) => {
                 track,
                 trackNormalized: normalize(track),
                 status: storedStatus,
-                history: [{ status: storedStatus, date }]
+                history: historyEntriesBase
             }));
 
         // Обновляем данные существующих треков
         await Track.updateMany({ track: { $in: existingTrackNumbers } }, {
             $set: { status: storedStatus, updatedBy: operatorInfo },
-            $push: { history: { status: storedStatus, date } }
+            $push: { history: { $each: historyEntriesBase } }
         });
 
         // Убедимся, что у существующих треков есть поле trackNormalized

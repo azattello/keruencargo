@@ -30,255 +30,143 @@ router.get('/tracks', async (req, res) => {
   };
 
   try {
-      console.log('Request params:', { page, limit, searchQuery, sortByDate, statusFilter, userFilter });
+      console.log('📊 Request params:', { page, limit, searchQuery, sortByDate, statusFilter, userFilter });
       const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
 
-      let query = {}; // Пустой объект запроса, который будет использоваться для фильтрации
-      let filterConditions = [];
+      let matchStage = {}; // Для $match в aggregation pipeline
+      let searchOrConditions = [];
 
       // Если есть поисковый запрос, добавляем его в запрос
-      let userIdsForSearch = [];
-      let bookmarkTrackNormalizeds = [];
-      let statusIdsForSearch = [];
       if (searchQuery) {
           const escapedQuery = escapeRegex(searchQuery);
           const regex = new RegExp(escapedQuery, 'i');
           const digitQuery = searchQuery.replace(/\D/g, '');
 
-          const userSearchConditions = [
-            { personalId: { $regex: regex } },
-            { name: { $regex: regex } },
-            { surname: { $regex: regex } },
-            { email: { $regex: regex } }
-          ];
-
-          if (digitQuery) {
-            const phoneNumber = Number(digitQuery);
-            if (!Number.isNaN(phoneNumber)) {
-              userSearchConditions.push({ phone: phoneNumber });
-            }
-          }
-
-          const matchedUsers = await User.find({
-            $or: userSearchConditions
-          }, '_id bookmarks').lean();
-
-          userIdsForSearch = matchedUsers.map(u => u._id);
-          const trackNormalizedSet = new Set();
-          matchedUsers.forEach(user => {
-            (user.bookmarks || []).forEach(bookmark => {
-              const normalizedBookmark = normalizeTrackString(bookmark.trackNormalized || bookmark.trackNumber);
-              if (normalizedBookmark) trackNormalizedSet.add(normalizedBookmark);
-            });
-          });
-          bookmarkTrackNormalizeds = [...trackNormalizedSet];
-
-          const matchedStatuses = await Status.find({ statusText: { $regex: regex } }, '_id').lean();
-          statusIdsForSearch = matchedStatuses.map(s => s._id);
-
-          const searchConditions = [
+          // Основные условия поиска по трекам и операторам
+          searchOrConditions = [
             { trackNormalized: { $regex: regex } },
             { track: { $regex: regex } },
             { 'createdBy.name': { $regex: regex } },
-            { 'updatedBy.name': { $regex: regex } },
-            ...(userIdsForSearch.length ? [{ user: { $in: userIdsForSearch } }] : []),
-            ...(statusIdsForSearch.length ? [{ status: { $in: statusIdsForSearch } }] : []),
-            ...(bookmarkTrackNormalizeds.length ? [{ trackNormalized: { $in: bookmarkTrackNormalizeds } }] : []),
-            ...(digitQuery ? [{ 'createdBy.phone': Number(digitQuery) }, { 'updatedBy.phone': Number(digitQuery) }] : [])
+            { 'updatedBy.name': { $regex: regex } }
           ];
 
-          if (searchConditions.length) {
-            filterConditions.push({ $or: searchConditions });
+          // Условия поиска по телефонам
+          if (digitQuery) {
+            const phoneNumber = Number(digitQuery);
+            if (!Number.isNaN(phoneNumber)) {
+              searchOrConditions.push({ 'createdBy.phone': phoneNumber });
+              searchOrConditions.push({ 'updatedBy.phone': phoneNumber });
+            }
           }
       }
 
-      // Если есть фильтр по статусу, добавляем его в запрос
+      // Добавляем фильтр по статусу
       if (statusFilter) {
         try {
-          filterConditions.push({ status: new mongoose.Types.ObjectId(statusFilter) });
+          matchStage.status = new mongoose.Types.ObjectId(statusFilter);
         } catch (err) {
           console.error('Invalid statusFilter:', statusFilter);
           return res.status(400).json({ message: 'Invalid status ID' });
         }
       }
       
-      // Если есть фильтр по наличию пользователя, добавляем его в запрос
+      // Добавляем фильтр по наличию пользователя
       if (userFilter === 'exists') {
-        filterConditions.push({ user: { $exists: true } });
+        matchStage.user = { $exists: true, $ne: null };
       } else if (userFilter === 'notExists') {
-        filterConditions.push({ user: { $exists: false } });
+        matchStage.user = { $exists: false };
       }
 
-      if (filterConditions.length > 1) {
-        query = { $and: filterConditions };
-      } else if (filterConditions.length === 1) {
-        query = filterConditions[0];
+      // Если есть условия поиска, добавляем их к фильтру
+      if (searchOrConditions.length > 0) {
+        matchStage.$or = searchOrConditions;
       }
-
-      console.log('Built query:', JSON.stringify(query, null, 2));
+      
+      console.log('🔍 Match stage:', JSON.stringify(matchStage, null, 2));
       
       // Устанавливаем параметры сортировки в зависимости от выбранного типа
-      let sortOptions = {};
+      let sortStage = { updatedAt: -1 }; // Default sort
       if (sortByDate === 'latest') {
-          sortOptions = { 'history.date': 'desc' }; // Сортировка по последней дате в истории
+          sortStage = { updatedAt: -1 }; // Сортировка по последней дате обновления
       } else if (sortByDate === 'oldest') {
-          sortOptions = { 'history.date': 'asc' }; // Сортировка по первой дате в истории
+          sortStage = { updatedAt: 1 }; // Сортировка по первой дате обновления
       }
 
-      let tracks = await Track.find(query)
-          .sort(sortOptions)
-          .limit(limit)
-          .skip(startIndex);
+      console.log('⏱️ Starting track query...');
+      const query = Track.find(matchStage)
+        .sort(sortStage)
+        .skip(startIndex)
+        .limit(limit)
+        .populate('status')
+        .populate('history.status')
+        .lean();
 
-      // Для треков с user как string (старые), найти User по id или phone в одной пакетной выборке
-      const legacyTracks = tracks.filter(track => track.user && typeof track.user === 'string' && track.user.trim());
-      if (legacyTracks.length > 0) {
-          const rawUsers = [...new Set(legacyTracks.map(track => track.user.trim()))];
-          const ids = [];
-          const phones = [];
-
-          rawUsers.forEach(rawUser => {
-              if (mongoose.isValidObjectId(rawUser)) {
-                  ids.push(rawUser);
-                  return;
-              }
-
-              const phone = rawUser.replace(/\D/g, '');
-              if (phone) {
-                  const phoneNumber = Number(phone);
-                  if (!Number.isNaN(phoneNumber)) {
-                      phones.push(phoneNumber);
-                  }
-              }
-          });
-
-          const userQuery = { $or: [] };
-          if (ids.length) userQuery.$or.push({ _id: { $in: ids } });
-          if (phones.length) userQuery.$or.push({ phone: { $in: phones } });
-
-          const legacyUsers = userQuery.$or.length > 0
-            ? await User.find(userQuery, 'name surname phone personalId').lean()
-            : [];
-
-          const usersById = new Map();
-          const usersByPhone = new Map();
-          legacyUsers.forEach(user => {
-              if (user._id) usersById.set(user._id.toString(), user);
-              if (typeof user.phone !== 'undefined') usersByPhone.set(String(user.phone), user);
-          });
-
-          legacyTracks.forEach(track => {
-              const rawUser = track.user.trim();
-              if (mongoose.isValidObjectId(rawUser)) {
-                  track.user = usersById.get(rawUser) || null;
-              } else {
-                  const phone = rawUser.replace(/\D/g, '');
-                  track.user = phone ? usersByPhone.get(phone) || null : null;
-              }
-          });
-      }
-
-      // Для треков без user, ищем в bookmarks пользователей и сохраняем название продукта
-      const tracksWithoutUser = tracks.filter(t => !t.user);
-      console.log(`Tracks without user: ${tracksWithoutUser.map(t => normalizeTrackString(t.trackNormalized || t.track)).join(', ')}`);
-      const bookmarkProductByTrack = {};
-      if (tracksWithoutUser.length > 0) {
-          const trackNormalizeds = tracksWithoutUser.map(t => normalizeTrackString(t.trackNormalized || t.track));
-          const usersWithBookmarks = await User.find({
-              'bookmarks.trackNormalized': { $in: trackNormalizeds }
-          }, '_id name surname phone personalId bookmarks.trackNormalized bookmarks.trackNumber bookmarks.description').lean();
-          console.log(`Users with bookmarks: ${usersWithBookmarks.length}`);
-
-          const userMap = {};
-          usersWithBookmarks.forEach(user => {
-              (user.bookmarks || []).forEach(bookmark => {
-                  const normalizedBookmark = normalizeTrackString(bookmark.trackNormalized || bookmark.trackNumber);
-                  if (trackNormalizeds.includes(normalizedBookmark)) {
-                      userMap[normalizedBookmark] = {
-                          _id: user._id,
-                          name: user.name,
-                          surname: user.surname,
-                          phone: user.phone,
-                          personalId: user.personalId,
-                          productName: bookmark.description || null
-                      };
-                      if (bookmark.description) {
-                        bookmarkProductByTrack[normalizedBookmark] = bookmark.description;
-                      }
-                  }
-              });
-          });
-
-          tracks.forEach(t => {
-              const normalizedTrack = normalizeTrackString(t.trackNormalized || t.track);
-              if (!t.user && normalizedTrack && userMap[normalizedTrack]) {
-                  t.user = userMap[normalizedTrack];
-                  t.productName = userMap[normalizedTrack].productName;
-              }
-          });
-      }
-
-      // Для треков с пользователем — по возможности достаём описание товара из его bookmarks
-      const userIdsWithBookmarks = [...new Set(tracks.filter(t => t.user && typeof t.user === 'object' && t.user._id).map(t => String(t.user._id)))];
-      const trackProductCacheByUser = {};
-      if (userIdsWithBookmarks.length > 0) {
-          const usersWithBookmarks = await User.find({ _id: { $in: userIdsWithBookmarks } }, 'bookmarks.trackNormalized bookmarks.trackNumber bookmarks.description').lean();
-          usersWithBookmarks.forEach(user => {
-              const bookmarkMap = {};
-              (user.bookmarks || []).forEach(bookmark => {
-                  const normalizedBookmark = normalizeTrackString(bookmark.trackNormalized || bookmark.trackNumber);
-                  bookmarkMap[normalizedBookmark] = bookmark.description || null;
-              });
-              trackProductCacheByUser[user._id.toString()] = bookmarkMap;
-          });
-      }
-
-      // Теперь populate user, статус и статус в истории
-      tracks = await Track.populate(tracks, [
-        { path: 'user', select: 'name surname phone personalId' },
-        { path: 'status', select: 'statusText' },
-        { path: 'history.status', select: 'statusText' }
+      const [tracks, totalCount] = await Promise.all([
+        query,
+        Track.countDocuments(matchStage)
       ]);
 
-      const totalCount = await Track.countDocuments(query); // Также учитываем query при подсчете общего количества документов
+      console.log(`✅ Query complete: ${tracks.length} tracks, totalCount: ${totalCount}`);
 
-      // Форматируем треки для фронта с последним статусом и оператором
+      // Нормализуем объект пользователя
       const normalizeUserObject = (user) => {
           if (!user) return null;
           if (typeof user === 'string') return null;
           if (typeof user === 'object') {
-              const innerUser = user.user && typeof user.user === 'object' ? user.user : user;
               return {
-                  _id: innerUser._id || null,
-                  name: innerUser.name || innerUser.firstName || '',
-                  surname: innerUser.surname || innerUser.lastName || '',
-                  phone: innerUser.phone || innerUser.phoneNumber || null,
-                  personalId: innerUser.personalId || null,
+                  _id: user._id || null,
+                  name: user.name || '',
+                  surname: user.surname || '',
+                  phone: user.phone || null,
+                  personalId: user.personalId || null,
               };
           }
           return null;
       };
 
+      const resolveTrackStatus = (track) => {
+          const normalizedHistory = (track.history || [])
+            .filter(item => item && item.status)
+            .map(item => ({
+              ...item,
+              statusText: item.status && typeof item.status === 'object' ? item.status.statusText : null,
+              statusId: item.status && typeof item.status === 'object' ? item.status._id : item.status
+            }))
+            .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
+
+          if (normalizedHistory.length === 0) {
+              const currentStatus = track.status && typeof track.status === 'object' ? track.status.statusText : 'Неизвестно';
+              return {
+                  statusText: currentStatus,
+                  statusId: track.status && typeof track.status === 'object' ? track.status._id : null,
+                  lastUpdateDate: track.updatedAt || track.createdAt || new Date(),
+              };
+          }
+
+          const lastStatus = normalizedHistory[normalizedHistory.length - 1];
+          const previousStatus = normalizedHistory[normalizedHistory.length - 2] || null;
+
+          if (lastStatus?.statusText === 'Получено' && previousStatus?.statusText && previousStatus.statusText.startsWith('Прибыло в филиал ')) {
+              return {
+                  statusText: previousStatus.statusText,
+                  statusId: previousStatus.statusId || null,
+                  lastUpdateDate: lastStatus.date || track.updatedAt || track.createdAt || new Date(),
+              };
+          }
+
+          return {
+              statusText: lastStatus?.statusText || 'Неизвестно',
+              statusId: lastStatus?.statusId || null,
+              lastUpdateDate: lastStatus?.date || track.updatedAt || track.createdAt || new Date(),
+          };
+      };
+
       const formattedTracks = tracks.map(track => {
-          const lastHistory = Array.isArray(track.history) && track.history.length > 0 ? track.history[track.history.length - 1] : null;
-          const lastStatusText = track.status ? track.status.statusText : ((lastHistory?.status?.statusText || lastHistory?.statusText) || 'Неизвестно');
-          const lastUpdateDate = lastHistory?.date || track.updatedAt || track.createdAt;
+          const resolvedStatus = resolveTrackStatus(track);
+          const lastUpdateDate = resolvedStatus.lastUpdateDate;
           const operator = track.updatedBy || track.createdBy || null;
           const userObject = normalizeUserObject(track.user);
           const userName = userObject ? [userObject.name, userObject.surname].filter(Boolean).join(' ') : null;
-          const normalizedTrack = normalizeTrackString(track.trackNormalized || track.track);
-          const productNameForUser = userObject && userObject._id ? trackProductCacheByUser[String(userObject._id)]?.[normalizedTrack] : null;
-          const productName = track.productName || productNameForUser || bookmarkProductByTrack[normalizedTrack] || null;
-          const history = (track.history || []).map(item => {
-              const plainItem = item && item.toObject ? item.toObject() : item;
-              return {
-                  ...plainItem,
-                  statusText: plainItem.status?.statusText || plainItem.statusText || null,
-                  status: plainItem.status && typeof plainItem.status === 'object' ? plainItem.status._id : plainItem.status,
-                  date: plainItem.date || null
-              };
-          });
 
           return {
               track: track.track || 'Без трека',
@@ -286,8 +174,7 @@ router.get('/tracks', async (req, res) => {
               personalId: userObject ? userObject.personalId : null,
               user: userName || userObject?.phone || userObject?.personalId || null,
               phone: userObject ? userObject.phone : null,
-              productName,
-              status: lastStatusText,
+              status: resolvedStatus.statusText,
               statusDate: lastUpdateDate,
               operatorName: operator ? operator.name : null,
               operatorPhone: operator ? operator.phone : null,
@@ -302,7 +189,6 @@ router.get('/tracks', async (req, res) => {
                   phone: track.updatedBy.phone || null,
                   role: track.updatedBy.role || null
               } : null,
-              history: history,
               createdAt: track.createdAt,
               updatedAt: track.updatedAt
           };
@@ -315,10 +201,10 @@ router.get('/tracks', async (req, res) => {
           tracks: formattedTracks
       };
 
-      console.log('Response: totalCount:', totalCount, 'tracks length:', formattedTracks.length);
+      console.log(`📤 Response: totalCount: ${totalCount}, tracks: ${formattedTracks.length}, page: ${page}/${response.totalPages}`);
       res.json(response);
   } catch (error) {
-      console.error('Error in /api/track/tracks:', error);
+      console.error('❌ Error in /api/track/tracks:', error);
       res.status(500).json({ message: 'Ошибка сервера', details: error.message });
   }
 });

@@ -43,6 +43,17 @@ trackSchema.pre('save', function(next) {
   next();
 });
 
+// Индексы для оптимизации поиска и фильтрации
+trackSchema.index({ trackNormalized: 1 }, { unique: true, sparse: true });
+trackSchema.index({ status: 1 });
+trackSchema.index({ user: 1 });
+trackSchema.index({ filial: 1 });
+trackSchema.index({ 'history.status': 1 });
+trackSchema.index({ createdAt: -1 });
+trackSchema.index({ updatedAt: -1 });
+trackSchema.index({ 'createdBy.phone': 1 });
+trackSchema.index({ 'updatedBy.phone': 1 });
+
 const Track = mongoose.model('Track', trackSchema);
 
 module.exports = Track;

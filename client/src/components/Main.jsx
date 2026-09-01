@@ -13,6 +13,7 @@ import chinaIcon from '../assets/icons/newicons/chinaadress.png';
 import qrIcon from '../assets/icons/newicons/qr.png';
 import dogovorIcon from '../assets/icons/newicons/dogovor.png';
 import contactsIcon from '../assets/icons/newicons/contacts2.png';
+import courseIcon from '../assets/icons/newicons/tracks.png';
 import MainBookmarks from './MainBookmarks';
 
 const Main = () => {
@@ -90,9 +91,9 @@ const Main = () => {
                         <p>Контакты</p>
                     </Link>
 
-                    <Link className="menu-item-wrapper" to="/parcels">
-                        <img src={archiveIcon} alt="" />
-                        <p>Посылки</p>
+                    <Link className="menu-item-wrapper" to="/courses">
+                        <img src={courseIcon} alt="" />
+                        <p>Курсы</p>
                     </Link>
 
                     <Link className="menu-item-wrapper" to="/archive">

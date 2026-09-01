@@ -92,6 +92,14 @@ const FooterMbl = ({ onNavItemClick }) => {
                                 <h5 className="nav-title">Объявления</h5>
                             </div>
                         )}
+                        <div className={`nav-link ${selectedNavItem === "CourseManager" && "nav-active"}`} onClick={() => handleNavItemClick("CourseManager")}>
+                            <img src={apps} alt="" className="nav-icon" />
+                            <h5 className="nav-title">Курсы</h5>
+                        </div>
+                        <div className={`nav-link ${selectedNavItem === "sendings" && "nav-active"}`} onClick={() => handleNavItemClick("sendings")}>
+                            <img src={apps} alt="" className="nav-icon" />
+                            <h5 className="nav-title">Отправка</h5>
+                        </div>
                         {/* глобальный счётчик ID убран из мобильного меню */}
                         <div className={`nav-link ${selectedNavItem === "myCargo" && "nav-active"}`} onClick={() => handleNavItemClick("myCargo")}>
                             <img src={truck} alt="" className="nav-icon" />

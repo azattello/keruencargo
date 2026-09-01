@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import "./styles/MainBookmarks.css";
 import axios from 'axios';
 import config from '../config';
@@ -260,15 +260,12 @@ export default function MainBookmarks({ initialTab = null }) {
   // Вспомогательная функция: нормализует статус (может быть populated объект, id или строка)
   const resolveStatusText = (statusOrObj) => {
     if (!statusOrObj) return 'Неизвестен';
-    // если это populated объект со statusText
     if (typeof statusOrObj === 'object' && statusOrObj.statusText) return statusOrObj.statusText;
-    // если это объект с _id, попробуем найти в списке статусов
     if (typeof statusOrObj === 'object' && statusOrObj._id) {
       const found = (statuses || []).find(s => String(s._id) === String(statusOrObj._id));
       if (found) return found.statusText;
       return String(statusOrObj._id);
     }
-    // если это строка или id, ищем по id или по совпадению текста статуса
     const byId = (statuses || []).find(s => String(s._id) === String(statusOrObj));
     if (byId) return byId.statusText;
     const byText = (statuses || []).find(s => s.statusText === statusOrObj);
@@ -276,73 +273,87 @@ export default function MainBookmarks({ initialTab = null }) {
     return String(statusOrObj);
   };
 
-  // ✅ Используем подсчет со ВСЕХ данных сервера, а не только текущей страницы
-  const statusCounts = {
+  const getDisplayStatus = useCallback((bookmark) => {
+    if (!bookmark || !Array.isArray(bookmark.history) || bookmark.history.length === 0) {
+      return { statusText: 'Неизвестен', isDerived: false };
+    }
+
+    const history = bookmark.history.slice();
+    const last = history[history.length - 1];
+    const lastText = resolveStatusText(last && last.status);
+
+    if (lastText === 'Получено' && history.length > 1) {
+      const previous = history[history.length - 2];
+      const previousText = resolveStatusText(previous && previous.status);
+      if (previousText && previousText.startsWith('Прибыло в филиал ')) {
+        return { statusText: previousText, isDerived: true };
+      }
+    }
+
+    return { statusText: lastText, isDerived: false };
+  }, [resolveStatusText]);
+
+  const statusCounts = useMemo(() => ({
     ...statusCountsFromServer,
     'Архив': archiveCount,
     total: totalCount || Object.values(statusCountsFromServer).reduce((a, b) => a + (b || 0), 0)
-  };
+  }), [statusCountsFromServer, archiveCount, totalCount]);
 
-  // Формируем табы: "Все" в начале, затем "Ожидаем", затем статусы с сервера, затем доп. статусы, и в конце "Архив"
-  const serverStatusTexts = (statuses || []).map(s => s.statusText);
-  const extraStatusTexts = Object.keys(statusCounts).filter(s => 
+  const serverStatusTexts = useMemo(() => (statuses || []).map(s => s.statusText), [statuses]);
+  const extraStatusTexts = useMemo(() => Object.keys(statusCounts).filter(s => 
     s !== 'total' && 
     s !== ADDED_LABEL && 
     s !== 'Архив' && 
-    s !== 'Добавлен в базу' && // исключаем старый текст на случай если остался
+    s !== 'Добавлен в базу' &&
     !serverStatusTexts.includes(s)
-  );
-  const statusTabs = ['Все', ADDED_LABEL, ...serverStatusTexts, ...extraStatusTexts, 'Архив'];
+  ), [statusCounts, ADDED_LABEL, serverStatusTexts]);
+  const statusTabs = useMemo(() => ['Все', ADDED_LABEL, ...serverStatusTexts, ...extraStatusTexts, 'Архив'], [serverStatusTexts, extraStatusTexts]);
 
-  // Формируем отфильтрованный / сгруппированный список для рендера
-  let filtered = [];
-  if (active === 'Архив') {
-    // Позже покажем архив отдельно
-    filtered = [];
-  } else if (active === 'Все') {
-    const notFoundNormalized = notFound.map(nf => ({ ...nf, _isNotFound: true }));
-    const combined = [];
-    // notFound (Добавлен в базу) первыми
-    combined.push(...notFoundNormalized);
+  const filtered = useMemo(() => {
+    if (active === 'Архив') return [];
 
-    const addSortedGroup = (statusText) => {
-      const group = bookmarks.filter(b => {
-        const last = b.history && b.history.length ? b.history[b.history.length - 1] : null;
-        const st = resolveStatusText(last && last.status);
-        return st === statusText;
-      }).slice().sort((a, b) => {
-        const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length -1].date) : new Date(a.createdAt || 0);
-        const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length -1].date) : new Date(b.createdAt || 0);
+    if (active === ADDED_LABEL) {
+      return notFound.map(nf => ({ ...nf, _isNotFound: true }));
+    }
+
+    if (active === 'Все') {
+      const notFoundNormalized = notFound.map(nf => ({ ...nf, _isNotFound: true }));
+      const combined = [...notFoundNormalized];
+
+      const addSortedGroup = (statusText) => {
+        const group = bookmarks.filter(b => {
+          const displayStatus = getDisplayStatus(b);
+          return displayStatus.statusText === statusText;
+        }).slice().sort((a, b) => {
+          const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length - 1].date) : new Date(a.createdAt || 0);
+          const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length - 1].date) : new Date(b.createdAt || 0);
+          return bd - ad;
+        });
+        combined.push(...group);
+      };
+
+      serverStatusTexts.forEach(addSortedGroup);
+      extraStatusTexts.forEach(addSortedGroup);
+
+      const includedIds = new Set(combined.filter(i => !i._isNotFound).map(x => x._id || x.trackNumber));
+      const rest = bookmarks.filter(b => !includedIds.has(b._id || b.trackNumber)).slice().sort((a, b) => {
+        const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length - 1].date) : new Date(a.createdAt || 0);
+        const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length - 1].date) : new Date(b.createdAt || 0);
         return bd - ad;
       });
-      combined.push(...group);
-    };
+      combined.push(...rest);
+      return combined;
+    }
 
-    serverStatusTexts.forEach(addSortedGroup);
-    extraStatusTexts.forEach(addSortedGroup);
-
-        // добавляем оставшиеся, если есть
-    const includedIds = new Set(combined.filter(i => !i._isNotFound).map(x => x._id || x.trackNumber));
-    const rest = bookmarks.filter(b => !includedIds.has(b._id || b.trackNumber)).slice().sort((a,b)=> {
-      const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length -1].date) : new Date(a.createdAt || 0);
-      const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length -1].date) : new Date(b.createdAt || 0);
+    return bookmarks.filter(b => {
+      const displayStatus = getDisplayStatus(b);
+      return displayStatus.statusText === active;
+    }).slice().sort((a, b) => {
+      const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length - 1].date) : new Date(a.createdAt || 0);
+      const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length - 1].date) : new Date(b.createdAt || 0);
       return bd - ad;
     });
-    combined.push(...rest);
-    filtered = combined;
-  } else if (active === ADDED_LABEL) {
-    filtered = notFound.map(nf => ({ ...nf, _isNotFound: true }));
-  } else {
-    filtered = bookmarks.filter(b => {
-      const last = b.history && b.history.length ? b.history[b.history.length - 1] : null;
-      const statusText = resolveStatusText(last && last.status);
-      return statusText === active;
-    }).slice().sort((a,b) => {
-      const ad = (a.history && a.history.length) ? new Date(a.history[a.history.length -1].date) : new Date(a.createdAt || 0);
-      const bd = (b.history && b.history.length) ? new Date(b.history[b.history.length -1].date) : new Date(b.createdAt || 0);
-      return bd - ad;
-    });
-  }
+  }, [active, ADDED_LABEL, bookmarks, extraStatusTexts, getDisplayStatus, notFound, serverStatusTexts]);
 
   return (
     <div>
@@ -386,7 +397,8 @@ export default function MainBookmarks({ initialTab = null }) {
             {!loading && filtered.map((t, i) => {
               const isNotFound = !!t._isNotFound;
               const last = (!isNotFound && t.history && t.history.length) ? t.history[t.history.length - 1] : null;
-              const currentStatus = isNotFound ? ADDED_LABEL : resolveStatusText(last && last.status);
+              const displayStatus = isNotFound ? { statusText: ADDED_LABEL } : getDisplayStatus(t);
+              const currentStatus = displayStatus.statusText;
               const updatedAt = isNotFound ? formatDate(t.createdAt) : (last ? formatDate(last.date) : formatDate(t.createdAt));
               const title = t.description || '';
               const code = t.trackNumber || (t.trackDetails && t.trackDetails.track);

@@ -18,6 +18,8 @@ import AddTrackToClient from "./AddTrackToClient";
 import SendInvoice from "./SendInvoice";
 import TrackSearch from "./TrackSearch";
 import AdminsList from "./AdminsList";
+import CourseManager from "../CourseManager";
+import Sendings from "./Sendings";
 
 const Dashboard = () => {
   const [selectedNavItem, setSelectedNavItem] = useState(sessionStorage.getItem('selectedNavItem') || "addTrack");
@@ -64,6 +66,8 @@ const Dashboard = () => {
           {selectedNavItem === "myCargo" && <MyCargo />}
           {selectedNavItem === "mailing" && <PartnerProgramAdmin />}
           {selectedNavItem === "Announcements" && <AnnouncementManager />}
+          {selectedNavItem === "CourseManager" && <CourseManager />}
+          {selectedNavItem === "sendings" && <Sendings />}
           {selectedNavItem === "globalIdCounter" && <GlobalIdCounterStatus />}
           {selectedNavItem === "sendInvoice" && <SendInvoice />}
           {selectedNavItem === "admins" && <AdminsList />}

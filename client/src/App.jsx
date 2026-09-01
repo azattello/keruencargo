@@ -19,6 +19,8 @@ import Referral from "./components/Referral";
 import AdminRoute from "./components/AdminRoute";
 import ClientRoute from "./components/ClientRoute";
 import AnnouncementManager from "./components/AnnouncementManager";
+import CoursesPage from './components/CoursesPage';
+import CourseManager from './components/CourseManager';
 // Pages
 import Bonuses from './components/pages/Bonuses';
 import Filials from './components/pages/Filials';
@@ -74,6 +76,7 @@ function App() {
         <Route path="/lost" element={<ClientRoute><LostClient /></ClientRoute>} />
         <Route path="/referral" element={<ClientRoute><Referral /></ClientRoute>} />
         <Route path="/archive" element={<ClientRoute><ArchivePage /></ClientRoute>} />
+        <Route path="/courses" element={<ClientRoute><CoursesPage /></ClientRoute>} />
 
         {/* Pages для клиентов (защищенные) */}
         <Route path="/bonus" element={<ClientRoute><Bonuses /></ClientRoute>} />
@@ -89,6 +92,7 @@ function App() {
         {/* Защищенные маршруты для админов (админка) */}
         <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
         <Route path="/admin/announcements" element={<AdminRoute><AnnouncementManager /></AdminRoute>} />
+        <Route path="/admin/courses" element={<AdminRoute><CourseManager /></AdminRoute>} />
         
         {/* Обработка всех остальных маршрутов */}
         <Route path="*" element={<NotFound />} />

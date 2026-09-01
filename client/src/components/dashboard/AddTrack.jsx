@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useSelector } from 'react-redux';
 import './css/admin.css';
 import Title from "./title";
 import scan from "../../assets/img/scan.png";
@@ -25,9 +26,11 @@ const AddTrack = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ track: '', userInfo: '' });
 
-    const role = localStorage.getItem('role');
+    const currentUser = useSelector(state => state.user.currentUser);
+    const role = currentUser?.role || localStorage.getItem('role');
     const { t } = useTranslation();
     const isChina = role === 'china';
+    const filialName = currentUser?.selectedFilial || '';
 
     const itemsPerPage = 20;
     const totalPages = Math.ceil(tracks.length / itemsPerPage);
@@ -65,16 +68,27 @@ const AddTrack = () => {
             const statusesData = await getStatus();
             setStatuses(statusesData);
 
-            // Для china всегда "Поступило на склад в Китае", для других - "Готов к выдаче"
-            const defaultStatusText = isChina ? "Поступило на склад в Китае" : "Готов к выдаче";
+            // Выбираем статус по умолчанию
+            let defaultStatusText = 'Готов к выдаче';
+            if (isChina) {
+                defaultStatusText = "Поступило на склад в Китае";
+            } else if (role === 'filial' && filialName) {
+                defaultStatusText = `Прибыло в филиал ${filialName}`;
+            } else if (role === 'client' && filialName) {
+                defaultStatusText = `Прибыло в филиал ${filialName}`;
+            }
+            
             const defaultStatus = statusesData.find(s => s.statusText === defaultStatusText);
             if (defaultStatus) {
                 setGlobalStatus(defaultStatus._id);
+            } else if (statusesData.length > 0) {
+                // Выбираем первый статус (филиальный если есть)
+                setGlobalStatus(statusesData[0]._id);
             }
         } catch (error) {
             console.error('Ошибка при получении статусов:', error);
         }
-    }, [isChina]);
+    }, [filialName, isChina, role]);
 
     useEffect(() => {
         fetchStatuses();
