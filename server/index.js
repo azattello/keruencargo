@@ -100,38 +100,38 @@ const listenWithRetry = (port, attempt = 1) => {
 };
 
 // Запуск сервера
-const start = async () => {
-    try {
-        await mongoose.connect(config.get('dbUrl'));
-        await listenWithRetry(PORT);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
-};
+// const start = async () => {
+//     try {
+//         await mongoose.connect(config.get('dbUrl'));
+//         await listenWithRetry(PORT);
+//     } catch (error) {
+//         console.error(error);
+//         process.exit(1);
+//     }
+// };
 
 
 
 
 // HTTPS options
-// const httpsOptions = {
-//     key: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/privkey.pem'),
-//     cert: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/fullchain.pem')
-// };
+const httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/keruencargo.kz/fullchain.pem')
+};
 
-// const start = async () => {
-//     try {
-//         await mongoose.connect(config.get('dbUrl'));
+const start = async () => {
+    try {
+        await mongoose.connect(config.get('dbUrl'));
 
-//         // Create HTTPS server
-//         https.createServer(httpsOptions, app).listen(PORT, () => {
-//             console.log("Server started on the port ", PORT);
-//         });
+        // Create HTTPS server
+        https.createServer(httpsOptions, app).listen(PORT, () => {
+            console.log("Server started on the port ", PORT);
+        });
         
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 start();
