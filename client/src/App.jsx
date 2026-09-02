@@ -52,6 +52,7 @@ function App() {
   }, [dispatch]);
 
   const isAuth = useSelector(state => state.user.isAuth);
+  const role = useSelector(state => state.user.currentUser?.role);
 
   // Во время загрузки показываем заглушку
   if (isLoading) {
@@ -92,7 +93,10 @@ function App() {
         {/* Защищенные маршруты для админов (админка) */}
         <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
         <Route path="/admin/announcements" element={<AdminRoute><AnnouncementManager /></AdminRoute>} />
-        <Route path="/admin/courses" element={<AdminRoute><CourseManager /></AdminRoute>} />
+        <Route
+          path="/admin/courses"
+          element={role === 'filial' ? <Navigate to="/dashboard" replace /> : <AdminRoute><CourseManager /></AdminRoute>}
+        />
         
         {/* Обработка всех остальных маршрутов */}
         <Route path="*" element={<NotFound />} />
