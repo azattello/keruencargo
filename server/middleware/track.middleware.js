@@ -3,9 +3,9 @@ const Track = require('../models/Track');
 const Settings = require('../models/Settings');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
-const Filial = require('../models/Filial');
 const Status = require('../models/Status');
 const { sendPushToUser } = require('../utils/pushHelper');
+const { getFilialNameForUser, getFilialArrivalStatusText } = require('../utils/filialStatus');
 
 const normalize = (s = '') => String(s).replace(/\s+/g, '').toUpperCase();
 const escapeRegex = (value = '') => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -39,15 +39,11 @@ const resolveStatus = async (statusValue) => {
 const resolveFilialArrivalStatus = async (userDoc) => {
     if (!userDoc) return null;
 
-    let filialName = userDoc.selectedFilial || '';
-    if (!filialName && userDoc.role === 'filial' && userDoc.phone) {
-        const filialDoc = await Filial.findOne({ userPhone: Number(String(userDoc.phone).replace(/\D/g, '')) }).lean();
-        filialName = filialDoc?.filialText || filialDoc?.filialName || '';
-    }
+    const filialName = await getFilialNameForUser(userDoc);
 
-    if (!filialName) return null;
+    const arrivalStatusText = getFilialArrivalStatusText(filialName);
+    if (!arrivalStatusText) return null;
 
-    const arrivalStatusText = `Прибыло в филиал ${filialName}`;
     let arrivalStatus = await Status.findOne({ statusText: arrivalStatusText }).lean();
     if (!arrivalStatus) {
         const lastStatus = await Status.findOne().sort({ statusNumber: -1 }).lean();

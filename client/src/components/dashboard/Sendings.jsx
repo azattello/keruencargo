@@ -18,6 +18,10 @@ const Sendings = () => {
   const [filterFilial, setFilterFilial] = useState('all');
   const [filterDate, setFilterDate] = useState('');
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const PAGE_SIZE = 50;
 
   const loadFilials = useCallback(async () => {
     try {
@@ -44,21 +48,27 @@ const Sendings = () => {
         search,
         filial: filterFilial,
         date: filterDate,
-        page: 1,
-        limit: 200
+        page,
+        limit: PAGE_SIZE
       });
       setRecords(response.items || []);
+      setTotalPages(Math.max(1, Number(response.totalPages) || 1));
+      setTotalRecords(Number(response.total) || 0);
     } catch (error) {
       console.error('Ошибка загрузки отправок:', error);
       setRecords([]);
     } finally {
       setLoading(false);
     }
-  }, [search, filterFilial, filterDate]);
+  }, [page, search, filterFilial, filterDate]);
 
   useEffect(() => {
     loadSendings();
   }, [loadSendings]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, filterFilial, filterDate]);
 
   const addTrackToQueue = (rawTrack) => {
     const track = normalizeTrack(rawTrack);
@@ -118,6 +128,7 @@ const Sendings = () => {
     try {
       const response = await addBulkSending(queue.map(item => item.track), selectedFilial, date);
       setQueue([]);
+      setPage(1);
       await loadSendings();
       alert(response.message || 'Отправка добавлена');
     } catch (error) {
@@ -287,6 +298,28 @@ const Sendings = () => {
               </div>
             ))
           )}
+
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '14px', marginTop: '20px' }}>
+            <button
+              type="button"
+              onClick={() => setPage(currentPage => Math.max(1, currentPage - 1))}
+              disabled={page === 1 || loading}
+              style={{ padding: '9px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', background: page === 1 ? '#f1f5f9' : '#fff', color: '#334155', cursor: page === 1 || loading ? 'not-allowed' : 'pointer' }}
+            >
+              Назад
+            </button>
+            <span style={{ color: '#475569', fontSize: '14px', whiteSpace: 'nowrap' }}>
+              Страница {page} из {totalPages} · Всего: {totalRecords}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage(currentPage => Math.min(totalPages, currentPage + 1))}
+              disabled={page >= totalPages || loading}
+              style={{ padding: '9px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', background: page >= totalPages ? '#f1f5f9' : '#fff', color: '#334155', cursor: page >= totalPages || loading ? 'not-allowed' : 'pointer' }}
+            >
+              Вперёд
+            </button>
+          </div>
         </div>
       </div>
     </div>

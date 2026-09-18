@@ -51,7 +51,7 @@ const getUserBookmarks = async (req, res) => {
             trackNumber: bookmark.trackNumber,
             createdAt: bookmark.createdAt,
             description: bookmark.description,
-            readyForPickup: false,
+            arrivedToFilial: false,
           };
         }
 
@@ -68,9 +68,13 @@ const getUserBookmarks = async (req, res) => {
           }
         }
 
-        // Проверяем, есть ли статус "Готов к выдаче"
-        const readyForPickup = track.history.some(
-          (h) => h.status && h.status.statusText === 'Готов к выдаче'
+        // Проверяем, есть ли динамический статус "Прибыло в филиал <название>"
+        const filialArrivalStatus = `Прибыло в филиал ${String(user.selectedFilial || '').trim()}`;
+        const arrivedToFilial = Boolean(
+          filialArrivalStatus &&
+          track.history.some(
+            (h) => h.status && h.status.statusText === filialArrivalStatus
+          )
         );
 
         return {
@@ -79,16 +83,16 @@ const getUserBookmarks = async (req, res) => {
           history: track.history,
           price: track.price,
           weight: track.weight,
-          readyForPickup, // Флаг для кнопки
+          arrivedToFilial, // Флаг, что посылка прибыла в выбранный филиал
           createdAt: track.createdAt, // Добавляем дату создания
         };
       })
     );
 
-    // Сортируем: сначала "Готов к выдаче", затем по дате (новые выше)
+    // Сортируем: сначала те, которые прибыли в филиал, затем по дате (новые выше)
     updatedBookmarks.sort((a, b) => {
-      if (a.readyForPickup !== b.readyForPickup) {
-        return b.readyForPickup - a.readyForPickup;
+      if (a.arrivedToFilial !== b.arrivedToFilial) {
+        return Number(b.arrivedToFilial) - Number(a.arrivedToFilial);
       }
       return new Date(b.createdAt) - new Date(a.createdAt);
     });

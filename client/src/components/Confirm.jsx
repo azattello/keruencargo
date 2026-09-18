@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 let confirmId = 0;
-export function openConfirm(message) {
+export function openConfirm(message, confirmLabel = 'Подтвердить') {
   return new Promise((resolve) => {
     const id = ++confirmId;
-    window.dispatchEvent(new CustomEvent('app-confirm', { detail: { id, message, resolve } }));
+    window.dispatchEvent(new CustomEvent('app-confirm', { detail: { id, message, confirmLabel, resolve } }));
   });
 }
 
@@ -13,8 +13,8 @@ export default function Confirm() {
 
   useEffect(() => {
     const handler = (e) => {
-      const { id, message, resolve } = e.detail;
-      setState({ id, message, resolve });
+      const { id, message, confirmLabel, resolve } = e.detail;
+      setState({ id, message, confirmLabel, resolve });
     };
     window.addEventListener('app-confirm', handler);
     return () => window.removeEventListener('app-confirm', handler);
@@ -22,7 +22,7 @@ export default function Confirm() {
 
   if (!state) return null;
 
-  const { message, resolve } = state;
+  const { message, confirmLabel, resolve } = state;
 
   const close = (answer) => {
     try { resolve(!!answer); } catch (err) { /* noop */ }
@@ -30,12 +30,14 @@ export default function Confirm() {
   };
 
   return (
-    <div className="confirm-overlay">
-      <div className="confirm-modal">
-        <div className="confirm-message">{message}</div>
-        <div className="confirm-actions">
-          <button className="btn-cancel" onClick={() => close(false)}>Отмена</button>
-          <button className="btn-save" onClick={() => close(true)}>Удалить</button>
+    <div className="app-confirm-overlay">
+      <div className="app-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="app-confirm-message">
+        <div id="app-confirm-message" className="app-confirm-message">{message}</div>
+        <div className="app-confirm-actions">
+          <button className="app-confirm-cancel" onClick={() => close(false)}>Отмена</button>
+          <button className="app-confirm-submit" onClick={() => close(true)}>
+            <span className="app-confirm-submit-label">{String(confirmLabel || 'Подтвердить')}</span>
+          </button>
         </div>
       </div>
     </div>

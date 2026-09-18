@@ -177,7 +177,7 @@ const Parcels2 = () => {
           <div className="bookmarks-list">
             {bookmarks.map((bookmark) => (
               <div className="bookmark-card" key={bookmark._id}>
-               <div className={`bookmark-header`} style={{ backgroundColor: bookmark.readyForPickup ? "#4caf50" : "#0F748C" }}>
+<div className={`bookmark-header`} style={{ backgroundColor: bookmark.arrivedToFilial ? "#4caf50" : "#0F748C" }}>
                
                   <h2 className="bookmark-h2">{bookmark.trackNumber}</h2>
                   <FaTrash className="removeLiBookmark" onClick={() => removeBookmark(bookmark.trackNumber)} />
@@ -217,7 +217,7 @@ const Parcels2 = () => {
                       </div>
                     );
                   })}
-                  {bookmark.readyForPickup && (
+                  {bookmark.arrivedToFilial && (
                     <button className='confirmTrack' onClick={() => handleConfirmReceipt(bookmark.trackNumber)}>
                       Подтвердить получение
                     </button>

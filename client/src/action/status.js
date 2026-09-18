@@ -33,9 +33,8 @@ export const getStatus = async () => {
       const response = await axios.get(`${configUrl}/api/status/getStatus`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
-      // Сортируем статусы по времени создания в порядке убывания
-      const sortedStatuses = response.data.sort((b,a ) => new Date(b.createdAt) - new Date(a.createdAt));
-      return sortedStatuses;
+      // Сервер уже формирует порядок с учётом роли и филиала.
+      return response.data;
   } catch (error) {
       throw new Error('Ошибка при получении статусов');
   }

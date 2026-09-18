@@ -15,7 +15,7 @@ const AddTrack = () => {
     const [statuses, setStatuses] = useState([]);
     const [tracks, setTracks] = useState([]);
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-    const [globalStatus, setGlobalStatus] = useState("Готов к выдаче");
+    const [globalStatus, setGlobalStatus] = useState("");
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -68,12 +68,17 @@ const AddTrack = () => {
             const statusesData = await getStatus();
             setStatuses(statusesData);
 
-            // Выбираем статус по умолчанию
-            let defaultStatusText = 'Готов к выдаче';
+            // Выбираем статус по умолчанию.
+            let defaultStatusText = 'Поступило на склад в Китае';
             if (isChina) {
                 defaultStatusText = "Поступило на склад в Китае";
-            } else if (role === 'filial' && filialName) {
-                defaultStatusText = `Прибыло в филиал ${filialName}`;
+            } else if (role === 'filial') {
+                // Филиал определяется сервером через Filial.userId, а не через selectedFilial аккаунта.
+                const filialStatus = statusesData.find(s => s.statusText?.startsWith('Прибыло в филиал '));
+                if (filialStatus) {
+                    setGlobalStatus(filialStatus._id);
+                    return;
+                }
             } else if (role === 'client' && filialName) {
                 defaultStatusText = `Прибыло в филиал ${filialName}`;
             }

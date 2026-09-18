@@ -174,7 +174,7 @@ router.get('/:userId/getBookmarks', async (req, res) => {
                     statusText: item.status && item.status.statusText ? item.status.statusText : null
                 }));
 
-                if (resolvedHistory.length === 0) return { statusText: 'Неизвестен', statusId: null };
+                if (resolvedHistory.length === 0) return { statusText: 'Ожидаем', statusId: null };
 
                 const lastStatus = resolvedHistory[resolvedHistory.length - 1];
                 const previousStatus = resolvedHistory[resolvedHistory.length - 2] || null;
@@ -242,7 +242,7 @@ router.get('/:userId/getBookmarks', async (req, res) => {
 
         if (statusFilter) {
             filteredBookmarks = statusFilter === 'Добавлен в базу'
-                ? filteredBookmarks.filter(bookmark => bookmark.type === 'notFound')
+                ? filteredBookmarks.filter(bookmark => bookmark.type === 'notFound' || bookmark.currentStatusText === 'Ожидаем')
                 : filteredBookmarks.filter(bookmark => bookmark.currentStatusText === statusFilter);
         }
 

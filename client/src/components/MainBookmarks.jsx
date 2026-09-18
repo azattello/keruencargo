@@ -32,6 +32,9 @@ export default function MainBookmarks({ initialTab = null }) {
 
   const currentUser = useSelector(state => state.user.currentUser);
   const userId = currentUser?.id;
+  const ownFilialArrivalStatus = currentUser?.selectedFilial
+    ? `Прибыло в филиал ${String(currentUser.selectedFilial).trim()}`
+    : '';
 
   const [isEditOpen, setEditOpen] = useState(false);
   const [editOriginalTrack, setEditOriginalTrack] = useState('');
@@ -72,7 +75,10 @@ export default function MainBookmarks({ initialTab = null }) {
 
   const fetchStatuses = useCallback(async () => {
     try {
-      const res = await axios.get(`${config.apiUrl}/api/status/getStatus`);
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${config.apiUrl}/api/status/getStatus`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       // Сортируем по statusNumber для правильного порядка статусов
       const sorted = (res.data || []).slice().sort((a, b) => (a.statusNumber || 0) - (b.statusNumber || 0));
       setStatuses(sorted);
@@ -164,7 +170,7 @@ export default function MainBookmarks({ initialTab = null }) {
   };
 
   const archiveBookmark = async (trackNumber) => {
-    const confirmArchive = await openConfirm('Добавить в архив?');
+    const confirmArchive = await openConfirm('Добавить в архив?', 'Архивировать');
     if (!confirmArchive) return;
     try {
       // Найти правильный bookmark по trackNumber
@@ -185,13 +191,14 @@ export default function MainBookmarks({ initialTab = null }) {
   };
 
   const archiveAllReceived = async () => {
-    // Используем filtered (уже отфильтрованные по статусу "Получено")
+    // Архивируем треки из текущей вкладки "Получено" или своего филиала.
     if (filtered.length === 0) {
-      showToast('Нет треков со статусом "Получено"', 'info');
+      showToast('Нет треков для архивации', 'info');
       return;
     }
 
-    const confirmArchive = await openConfirm(`Архивировать ${filtered.length} треков?`);
+    const trackWord = filtered.length === 1 ? 'трек' : filtered.length < 5 ? 'трека' : 'треков';
+    const confirmArchive = await openConfirm(`Архивировать ${filtered.length} ${trackWord}?`, 'Архивировать');
     if (!confirmArchive) return;
 
     try {
@@ -258,7 +265,7 @@ export default function MainBookmarks({ initialTab = null }) {
   };
 
   // Вспомогательная функция: нормализует статус (может быть populated объект, id или строка)
-  const resolveStatusText = (statusOrObj) => {
+  const resolveStatusText = useCallback((statusOrObj) => {
     if (!statusOrObj) return 'Неизвестен';
     if (typeof statusOrObj === 'object' && statusOrObj.statusText) return statusOrObj.statusText;
     if (typeof statusOrObj === 'object' && statusOrObj._id) {
@@ -271,11 +278,11 @@ export default function MainBookmarks({ initialTab = null }) {
     const byText = (statuses || []).find(s => s.statusText === statusOrObj);
     if (byText) return byText.statusText;
     return String(statusOrObj);
-  };
+  }, [statuses]);
 
   const getDisplayStatus = useCallback((bookmark) => {
     if (!bookmark || !Array.isArray(bookmark.history) || bookmark.history.length === 0) {
-      return { statusText: 'Неизвестен', isDerived: false };
+      return { statusText: ADDED_LABEL, isDerived: false };
     }
 
     const history = bookmark.history.slice();
@@ -291,7 +298,7 @@ export default function MainBookmarks({ initialTab = null }) {
     }
 
     return { statusText: lastText, isDerived: false };
-  }, [resolveStatusText]);
+  }, [ADDED_LABEL, resolveStatusText]);
 
   const statusCounts = useMemo(() => ({
     ...statusCountsFromServer,
@@ -299,21 +306,32 @@ export default function MainBookmarks({ initialTab = null }) {
     total: totalCount || Object.values(statusCountsFromServer).reduce((a, b) => a + (b || 0), 0)
   }), [statusCountsFromServer, archiveCount, totalCount]);
 
-  const serverStatusTexts = useMemo(() => (statuses || []).map(s => s.statusText), [statuses]);
+  const serverStatusTexts = useMemo(() => (statuses || [])
+    .map(s => s.statusText)
+    .filter(statusText => {
+      if (!statusText?.startsWith('Прибыло в филиал ')) return true;
+      return statusText === ownFilialArrivalStatus;
+    }), [statuses, ownFilialArrivalStatus]);
   const extraStatusTexts = useMemo(() => Object.keys(statusCounts).filter(s => 
     s !== 'total' && 
-    s !== ADDED_LABEL && 
     s !== 'Архив' && 
     s !== 'Добавлен в базу' &&
+    (!s.startsWith('Прибыло в филиал ') || s === ownFilialArrivalStatus) &&
     !serverStatusTexts.includes(s)
-  ), [statusCounts, ADDED_LABEL, serverStatusTexts]);
-  const statusTabs = useMemo(() => ['Все', ADDED_LABEL, ...serverStatusTexts, ...extraStatusTexts, 'Архив'], [serverStatusTexts, extraStatusTexts]);
+  ), [statusCounts, ownFilialArrivalStatus, serverStatusTexts]);
+  const statusTabs = useMemo(() => {
+    const regularStatuses = serverStatusTexts.filter(statusText => statusText !== 'Получено');
+    const extraStatuses = extraStatusTexts.filter(statusText => statusText !== 'Получено' && statusText !== ADDED_LABEL);
+    return ['Все', ADDED_LABEL, ...regularStatuses, ...extraStatuses, 'Получено', 'Архив'];
+  }, [ADDED_LABEL, extraStatusTexts, serverStatusTexts]);
 
   const filtered = useMemo(() => {
     if (active === 'Архив') return [];
 
     if (active === ADDED_LABEL) {
-      return notFound.map(nf => ({ ...nf, _isNotFound: true }));
+      const notFoundItems = notFound.map(nf => ({ ...nf, _isNotFound: true }));
+      const emptyHistoryItems = bookmarks.filter(bookmark => getDisplayStatus(bookmark).statusText === ADDED_LABEL);
+      return [...notFoundItems, ...emptyHistoryItems];
     }
 
     if (active === 'Все') {
@@ -371,8 +389,8 @@ export default function MainBookmarks({ initialTab = null }) {
 
       </div>
 
-      {/* Кнопка для массового архивирования - только на табе "Получено" */}
-      {active === 'Получено' && filtered.length > 0 && (
+      {/* Кнопка для массовой архивации своего филиального статуса и "Получено" */}
+      {(active === ownFilialArrivalStatus || active === 'Получено') && filtered.length > 0 && (
         <div className="archive-button-wrapper">
           <button className="btn-archive-all" onClick={archiveAllReceived}>
             🏷️ Архивировать все полученные ({filtered.length})
@@ -432,7 +450,7 @@ export default function MainBookmarks({ initialTab = null }) {
                           {openTrack === `menu-${i}` && (
                             <div className="track-menu">
                               <button className="menu-item" onClick={(e) => { e.stopPropagation(); openEditModal({trackNumber: code, description: t.description, isNotFound}); }}>Редактировать</button>
-                              {currentStatus === 'Получено' && (
+                              {(currentStatus === ownFilialArrivalStatus || currentStatus === 'Получено') && (
                                 <button className="menu-item archive" onClick={(e) => { e.stopPropagation(); archiveBookmark(code); }}>В архив</button>
                               )}
                               <button className="menu-item delete" onClick={(e) => { e.stopPropagation(); deleteBookmark(code); }}>Удалить</button>

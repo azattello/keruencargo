@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Status = require('../models/Status');
 const User = require('../models/User');
-const Filial = require('../models/Filial');
+const Track = require('../models/Track');
+const { getFilialNameForUser, getFilialArrivalStatusText } = require('../utils/filialStatus');
 const {check, validationResult} = require("express-validator")
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -55,11 +56,6 @@ router.get('/getStatus', async (req, res) => {
     const receivedStatus = await Status.findOne({ statusText: 'Получено' }).lean();
     const receivedStatusNumber = receivedStatus?.statusNumber || 999;
 
-    const getFilialArrivalStatusText = (filialName) => {
-      const text = String(filialName || '').trim();
-      return text ? `Прибыло в филиал ${text}` : null;
-    };
-
     const ensureFilialArrivalStatus = async (filialName) => {
       const statusText = getFilialArrivalStatusText(filialName);
       if (!statusText) return null;
@@ -76,7 +72,7 @@ router.get('/getStatus', async (req, res) => {
 
     let userFilialStatus = null;
     if (currentUser && ['filial', 'client'].includes(currentUser.role)) {
-      const ownFilialName = String(currentUser.selectedFilial || '').trim();
+      const ownFilialName = await getFilialNameForUser(currentUser);
       if (ownFilialName) {
         userFilialStatus = await ensureFilialArrivalStatus(ownFilialName);
       }
@@ -114,10 +110,9 @@ router.get('/getStatus', async (req, res) => {
     let statusCounts = [];
     try {
       const statusIds = statuses.map(s => s._id);
-      statusCounts = await Status.aggregate([
-        { $match: { _id: { $in: statusIds } } },
-        { $lookup: { from: 'tracks', localField: '_id', foreignField: 'status', as: 'tracks' } },
-        { $project: { _id: 1, statusText: 1, count: { $size: '$tracks' } } }
+      statusCounts = await Track.aggregate([
+        { $match: { status: { $in: statusIds } } },
+        { $group: { _id: '$status', count: { $sum: 1 } } }
       ]);
     } catch (aggError) {
       console.error('❌ Aggregation error:', aggError);

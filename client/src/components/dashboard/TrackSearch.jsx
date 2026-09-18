@@ -28,7 +28,15 @@ const TrackSearch = () => {
 
             if (response.data.tracks && response.data.tracks.length > 0) {
                 const track = response.data.tracks[0];
-                setTrackData(track);
+                const historyResponse = await axios.get(
+                    `${config.apiUrl}/api/track/history/${encodeURIComponent(track.track)}`
+                );
+
+                setTrackData({
+                    ...track,
+                    history: historyResponse.data.history || [],
+                    status: historyResponse.data.status || track.status,
+                });
             } else {
                 setError('Трек не найден');
             }

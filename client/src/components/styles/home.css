@@ -9,7 +9,7 @@
 }
 
 .home-banner {
-  width: 100%;
+  width: min(100%, 760px);
   margin-bottom: 30px;
   position: relative;
   border-radius: 12px;
@@ -19,9 +19,10 @@
 
 .banner-image {
   width: 100%;
-  height: auto;
+  height: 180px;
   display: block;
   object-fit: cover;
+  object-position: center;
 }
 
 .banner-title {
@@ -43,6 +44,30 @@
   font-size: 14px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   margin: 0;
+}
+
+@media (max-width: 600px) {
+  .home-banner {
+    width: calc(100% - 24px);
+    margin-bottom: 20px;
+  }
+
+  .banner-image {
+    height: 120px;
+  }
+
+  .banner-title {
+    left: 16px;
+    bottom: 32px;
+    font-size: 18px;
+  }
+
+  .banner-description {
+    left: 16px;
+    bottom: 10px;
+    max-width: calc(100% - 32px);
+    font-size: 12px;
+  }
 }
 
 .home-card {
