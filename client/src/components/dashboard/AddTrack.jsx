@@ -73,12 +73,7 @@ const AddTrack = () => {
             if (isChina) {
                 defaultStatusText = "Поступило на склад в Китае";
             } else if (role === 'filial') {
-                // Филиал определяется сервером через Filial.userId, а не через selectedFilial аккаунта.
-                const filialStatus = statusesData.find(s => s.statusText?.startsWith('Прибыло в филиал '));
-                if (filialStatus) {
-                    setGlobalStatus(filialStatus._id);
-                    return;
-                }
+                defaultStatusText = 'Получено';
             } else if (role === 'client' && filialName) {
                 defaultStatusText = `Прибыло в филиал ${filialName}`;
             }

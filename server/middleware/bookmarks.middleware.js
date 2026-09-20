@@ -55,11 +55,10 @@ const getUserBookmarks = async (req, res) => {
           };
         }
 
-        // Обновляем поле `user` в документе трека (телефон как строка без спецсимволов)
-        const userPhoneStr = String(user.phone || '').replace(/\D/g, '');
-        if (!track.user || String(track.user) !== userPhoneStr) {
-          track.user = userPhoneStr;
-          console.log(`[bookmarks] saving track.user -> trackId=${track._id}, user=${userPhoneStr}`);
+        // Track.user хранит ссылку на пользователя, а телефон выводится через populate.
+        if (!track.user || String(track.user) !== String(user._id)) {
+          track.user = user._id;
+          console.log(`[bookmarks] saving track.user -> trackId=${track._id}, user=${user._id}`);
           try {
             await track.save();
             console.log(`[bookmarks] saved track.user -> trackId=${track._id}, user=${track.user}`);

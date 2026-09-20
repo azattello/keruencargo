@@ -50,13 +50,38 @@ router.get('/tracks', async (req, res) => {
             { 'updatedBy.name': { $regex: regex } }
           ];
 
+          const userSearchConditions = [
+            { name: { $regex: regex } },
+            { surname: { $regex: regex } },
+            { personalId: { $regex: regex } }
+          ];
+          if (mongoose.isValidObjectId(searchQuery)) {
+              userSearchConditions.push({ _id: new mongoose.Types.ObjectId(searchQuery) });
+          }
+
           // Условия поиска по телефонам
           if (digitQuery) {
             const phoneNumber = Number(digitQuery);
             if (!Number.isNaN(phoneNumber)) {
-              searchOrConditions.push({ 'createdBy.phone': phoneNumber });
-              searchOrConditions.push({ 'updatedBy.phone': phoneNumber });
+                  searchOrConditions.push({ 'createdBy.phone': phoneNumber });
+                  searchOrConditions.push({ 'updatedBy.phone': phoneNumber });
+                  userSearchConditions.push({ phone: phoneNumber });
             }
+          }
+
+          const matchingUsers = await User.find({ $or: userSearchConditions }).select('_id').lean();
+          if (matchingUsers.length > 0) {
+              searchOrConditions.push({ user: { $in: matchingUsers.map(user => user._id) } });
+
+              const matchingUserBookmarks = await User.find({
+                _id: { $in: matchingUsers.map(user => user._id) }
+              }).select('bookmarks.trackNumber bookmarks.trackNormalized').lean();
+              const matchingTrackNumbers = matchingUserBookmarks.flatMap(user =>
+                (user.bookmarks || []).map(bookmark => bookmark.trackNormalized || normalizeTrackString(bookmark.trackNumber))
+              ).filter(Boolean);
+              if (matchingTrackNumbers.length > 0) {
+                  searchOrConditions.push({ trackNormalized: { $in: matchingTrackNumbers } });
+              }
           }
       }
 
@@ -97,6 +122,7 @@ router.get('/tracks', async (req, res) => {
         .sort(sortStage)
         .skip(startIndex)
         .limit(limit)
+        .populate('user', 'name surname phone personalId')
         .populate('status')
         .populate('history.status')
         .lean();
@@ -107,6 +133,33 @@ router.get('/tracks', async (req, res) => {
       ]);
 
       console.log(`✅ Query complete: ${tracks.length} tracks, totalCount: ${totalCount}`);
+
+        // Для старых записей без Track.user восстанавливаем владельца по его закладке.
+        const trackNumbers = tracks.map(track => track.trackNormalized).filter(Boolean);
+        const originalTrackNumbers = tracks.map(track => track.track).filter(Boolean);
+        const trackIds = tracks.map(track => track._id).filter(Boolean);
+        const bookmarkOwners = trackNumbers.length > 0
+          ? await User.find({
+              $or: [
+                { 'bookmarks.trackNormalized': { $in: trackNumbers } },
+                { 'bookmarks.trackNumber': { $in: originalTrackNumbers } },
+                { 'bookmarks.trackId': { $in: trackIds } }
+              ]
+            })
+            .select('name surname phone personalId bookmarks.trackId bookmarks.trackNumber bookmarks.trackNormalized')
+          .lean()
+        : [];
+        const ownerByTrack = new Map();
+        const ownerByTrackId = new Map();
+        bookmarkOwners.forEach(user => {
+          (user.bookmarks || []).forEach(bookmark => {
+            const normalized = bookmark.trackNormalized || normalizeTrackString(bookmark.trackNumber);
+            if (normalized && !ownerByTrack.has(normalized)) ownerByTrack.set(normalized, user);
+                if (bookmark.trackId && !ownerByTrackId.has(String(bookmark.trackId))) {
+                    ownerByTrackId.set(String(bookmark.trackId), user);
+                }
+          });
+        });
 
       // Нормализуем объект пользователя
       const normalizeUserObject = (user) => {
@@ -143,16 +196,7 @@ router.get('/tracks', async (req, res) => {
               };
           }
 
-          const lastStatus = normalizedHistory[normalizedHistory.length - 1];
-          const previousStatus = normalizedHistory[normalizedHistory.length - 2] || null;
-
-          if (lastStatus?.statusText === 'Получено' && previousStatus?.statusText && previousStatus.statusText.startsWith('Прибыло в филиал ')) {
-              return {
-                  statusText: previousStatus.statusText,
-                  statusId: previousStatus.statusId || null,
-                  lastUpdateDate: lastStatus.date || track.updatedAt || track.createdAt || new Date(),
-              };
-          }
+            const lastStatus = normalizedHistory[normalizedHistory.length - 1];
 
           return {
               statusText: lastStatus?.statusText || 'Неизвестно',
@@ -165,7 +209,10 @@ router.get('/tracks', async (req, res) => {
           const resolvedStatus = resolveTrackStatus(track);
           const lastUpdateDate = resolvedStatus.lastUpdateDate;
           const operator = track.updatedBy || track.createdBy || null;
-          const userObject = normalizeUserObject(track.user);
+          const userObject = normalizeUserObject(track.user)
+            || ownerByTrackId.get(String(track._id))
+            || ownerByTrack.get(track.trackNormalized)
+            || null;
           const userName = userObject ? [userObject.name, userObject.surname].filter(Boolean).join(' ') : null;
 
           return {

@@ -177,14 +177,6 @@ router.get('/:userId/getBookmarks', async (req, res) => {
                 if (resolvedHistory.length === 0) return { statusText: 'Ожидаем', statusId: null };
 
                 const lastStatus = resolvedHistory[resolvedHistory.length - 1];
-                const previousStatus = resolvedHistory[resolvedHistory.length - 2] || null;
-
-                if (lastStatus && lastStatus.statusText === 'Получено' && previousStatus) {
-                    const previousStatusText = previousStatus?.statusText;
-                    if (previousStatusText && previousStatusText.startsWith('Прибыло в филиал ')) {
-                        return { statusText: previousStatusText, statusId: previousStatus.status?._id || previousStatus.status || null };
-                    }
-                }
 
                 if (lastStatus && lastStatus.statusText && lastStatus.statusText.startsWith('Прибыло в филиал ')) {
                     return { statusText: lastStatus.statusText, statusId: lastStatus.status?._id || lastStatus.status || null };

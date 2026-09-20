@@ -9,7 +9,7 @@ import lost from '../../assets/img/lost.png'
 import apps from '../../assets/img/apps.png'
 
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../action/user";
 
 const FooterMbl = ({ onNavItemClick }) => {
@@ -42,6 +42,10 @@ const FooterMbl = ({ onNavItemClick }) => {
                 
                     {/* Мобильная карточка профиля скрывается (по задаче) */}
                 <div className="navigation-admin">
+                    <Link className="site-home-link" to="/" onClick={() => setMobileMenu(false)} aria-label="Перейти на сайт">
+                        <span className="site-home-link-mark">↗</span>
+                        <span>Ваш сайт</span>
+                    </Link>
                     
                     {/* СЕКЦИЯ: ТРАКИНГ */}
                     <div className="nav-section">

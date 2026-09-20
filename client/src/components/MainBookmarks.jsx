@@ -287,17 +287,7 @@ export default function MainBookmarks({ initialTab = null }) {
 
     const history = bookmark.history.slice();
     const last = history[history.length - 1];
-    const lastText = resolveStatusText(last && last.status);
-
-    if (lastText === 'Получено' && history.length > 1) {
-      const previous = history[history.length - 2];
-      const previousText = resolveStatusText(previous && previous.status);
-      if (previousText && previousText.startsWith('Прибыло в филиал ')) {
-        return { statusText: previousText, isDerived: true };
-      }
-    }
-
-    return { statusText: lastText, isDerived: false };
+    return { statusText: resolveStatusText(last && last.status), isDerived: false };
   }, [ADDED_LABEL, resolveStatusText]);
 
   const statusCounts = useMemo(() => ({
@@ -390,7 +380,7 @@ export default function MainBookmarks({ initialTab = null }) {
       </div>
 
       {/* Кнопка для массовой архивации своего филиального статуса и "Получено" */}
-      {(active === ownFilialArrivalStatus || active === 'Получено') && filtered.length > 0 && (
+      {active === 'Получено' && filtered.length > 0 && (
         <div className="archive-button-wrapper">
           <button className="btn-archive-all" onClick={archiveAllReceived}>
             🏷️ Архивировать все полученные ({filtered.length})
@@ -450,7 +440,7 @@ export default function MainBookmarks({ initialTab = null }) {
                           {openTrack === `menu-${i}` && (
                             <div className="track-menu">
                               <button className="menu-item" onClick={(e) => { e.stopPropagation(); openEditModal({trackNumber: code, description: t.description, isNotFound}); }}>Редактировать</button>
-                              {(currentStatus === ownFilialArrivalStatus || currentStatus === 'Получено') && (
+                              {currentStatus === 'Получено' && (
                                 <button className="menu-item archive" onClick={(e) => { e.stopPropagation(); archiveBookmark(code); }}>В архив</button>
                               )}
                               <button className="menu-item delete" onClick={(e) => { e.stopPropagation(); deleteBookmark(code); }}>Удалить</button>

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../action/user";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = ({ onNavItemClick }) => {
   const [selectedNavItem, setSelectedNavItem] = useState(sessionStorage.getItem('selectedNavItem') || "addTrack");
@@ -30,6 +30,10 @@ const Sidebar = ({ onNavItemClick }) => {
   return (
     <div id="sidebar" className='sidebar'>
       <div className="navigation-admin">
+        <Link className="site-home-link" to="/" aria-label="Перейти на сайт">
+          <span className="site-home-link-mark">↗</span>
+          <span>Ваш сайт</span>
+        </Link>
         {isChina ? (
           <div className="nav-section">
             <h4 className="nav-section-title">📦 {t('warehouse.title')}</h4>

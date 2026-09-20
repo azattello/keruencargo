@@ -80,6 +80,40 @@
 .navigation-admin::-webkit-scrollbar-thumb:active {
     background: #777;
 }   
+.site-home-link {
+    align-items: center;
+    background: linear-gradient(135deg, #2b86a5, #236b88);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    color: #fff;
+    display: flex;
+    font-size: 13px;
+    font-weight: 700;
+    gap: 8px;
+    justify-content: center;
+    letter-spacing: 0.2px;
+    min-height: 42px;
+    text-decoration: none;
+    transition: filter 0.2s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.site-home-link:hover {
+    color: #fff;
+    filter: brightness(1.12);
+}
+
+.site-home-link-mark {
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: 14px;
+    height: 20px;
+    justify-content: center;
+    line-height: 1;
+    width: 20px;
+}
 .nav-link{
     display: flex;
     align-items: center;

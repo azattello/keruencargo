@@ -5,7 +5,6 @@ const User = require('../models/User');
 const Notification = require('../models/Notification');
 const Status = require('../models/Status');
 const { sendPushToUser } = require('../utils/pushHelper');
-const { getFilialNameForUser, getFilialArrivalStatusText } = require('../utils/filialStatus');
 
 const normalize = (s = '') => String(s).replace(/\s+/g, '').toUpperCase();
 const escapeRegex = (value = '') => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -36,44 +35,12 @@ const resolveStatus = async (statusValue) => {
     return statusDoc;
 };
 
-const resolveFilialArrivalStatus = async (userDoc) => {
-    if (!userDoc) return null;
-
-    const filialName = await getFilialNameForUser(userDoc);
-
-    const arrivalStatusText = getFilialArrivalStatusText(filialName);
-    if (!arrivalStatusText) return null;
-
-    let arrivalStatus = await Status.findOne({ statusText: arrivalStatusText }).lean();
-    if (!arrivalStatus) {
-        const lastStatus = await Status.findOne().sort({ statusNumber: -1 }).lean();
-        const nextStatusNumber = (lastStatus?.statusNumber || 0) + 1;
-        arrivalStatus = await Status.create({ statusText: arrivalStatusText, statusNumber: nextStatusNumber });
-    }
-
-    return arrivalStatus;
-};
-
 const buildHistoryEntries = async (requestUser, statusObj, date) => {
     if (!statusObj || !statusObj.statusText) {
         return [{ status: statusObj?._id || null, date }].filter(entry => entry.status);
     }
 
-    const normalizedStatusText = String(statusObj.statusText).trim();
-    if (normalizedStatusText !== 'Получено') {
-        return [{ status: statusObj._id, date }].filter(entry => entry.status);
-    }
-
-    const operator = requestUser ? await User.findById(requestUser.id || requestUser._id).select('phone role selectedFilial') : null;
-    const arrivalStatus = await resolveFilialArrivalStatus(operator || requestUser);
-    if (!arrivalStatus) {
-        return [{ status: statusObj._id, date }].filter(entry => entry.status);
-    }
-
-    return [
-        { status: arrivalStatus._id, date },
-        { status: statusObj._id, date }
-    ];
+    return [{ status: statusObj._id, date }].filter(entry => entry.status);
 };
 
 const updateTrack = async (req, res, next) => {
